@@ -1,0 +1,70 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using CaricomeImpacsAssestment.FlowerShop.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR;
+@using Volo.Abp.Users
+@model CaricomeImpacsAssestment.FlowerShop.Web.Pages.Shop.IndexModel
+@inject IHtmlLocalizer<FlowerShopResource> L
+@inject ICurrentUser CurrentUser
+@section styles {
+    <abp-style src="/Pages/Shop/Index.css" />
+}
+@section scripts {
+    <abp-script src="/Pages/Shop/Index.js" />
+    <abp-script type="typeof(SignalRBrowserScriptContributor)" />
+
+}
+<div class="container">
+    
+    <div class="row mb-4">
+        <div class="col-12">
+            <img src="/Pages/images/path_to_your_banner_image.jpg" alt="Banner" class="img-fluid w-100">
+        </div>
+    </div>
+    <div class="row">
+       
+        <div class="col-md-9">
+            <div class="row">
+                @foreach (var product in Model.ItemsList)
+                {
+                    <div class="col-md-3 mb-4">
+                        <a href="/product/detail/@product.allItems.Id" class="text-decoration-none">
+                            <div class="card h-95 card-hover">
+                                <img src="@product.allItems.IconUrl" alt="@product.allItems.Name" class="card-img-top">
+                                <div class="card-body">
+                                    <h6 class="card-title text-center">@product.allItems.Name</h6>
+                                    <h4 class="card-text text-center">@product.price.SellCost</h4>
+
+                                </div>
+                            </div>
+                        </a>
+                        <div class="card-footer hover-footer">
+                            <button class="btn btn-success">Add to Cart</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    
+    
+        <div class="col-md-3">
+            <div class="list-group">
+                @foreach (var group in Model.ItemsList)
+                {
+                    <button type="button" class="list-group-item list-group-item-action" onclick="filterProducts('@group.productGroup.Id')">
+                        @group.productGroup.Name
+                    </button>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function filterProducts(groupId) {
+            // Implement the logic to filter products based on the selected group.
+            // This might involve an AJAX call to the server to fetch filtered products,
+            // or you could implement client-side filtering if all products are already loaded on the page.
+        }
+    </script>
+</div>

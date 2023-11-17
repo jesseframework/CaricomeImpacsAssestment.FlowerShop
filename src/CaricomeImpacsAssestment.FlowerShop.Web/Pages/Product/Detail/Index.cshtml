@@ -1,0 +1,35 @@
+﻿@page "/product/detail/{id:guid}"
+@using Microsoft.AspNetCore.Mvc.Localization
+@using CaricomeImpacsAssestment.FlowerShop.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR;
+@using Volo.Abp.Users
+@model CaricomeImpacsAssestment.FlowerShop.Web.Pages.Product.Detail.IndexModel
+@inject IHtmlLocalizer<FlowerShopResource> L
+@inject ICurrentUser CurrentUser
+@section styles {
+    <abp-style src="/Pages/Shop/Index.css" />
+}
+@section scripts {
+    <abp-script src="/Pages/Shop/Index.js" />
+    <abp-script type="typeof(SignalRBrowserScriptContributor)" />
+
+}
+<div class="container">
+    <div>
+        <div>
+            @foreach (var image in Model.ItemsList)
+            {
+                <img src="@image.allItems.ItemImagesUrl1" alt="@image.allItems.Description">
+                <img src="@image.allItems.ItemImagesUrl2" alt="@image.allItems.Description">
+                <img src="@image.allItems.ItemImagesUrl3" alt="@image.allItems.Description">
+            }
+        </div>
+        <h2>@Model.ItemsList[0].allItems.Description</h2>
+        
+        <p>@Model.ItemsList[0].allItems.LongDescription</p>
+        <p>Price: @Model.ItemsList[0].price.SellCost</p>
+        <input type="number" value="1" min="1"  />
+        <button>Add to Cart</button>
+		
+    </div>
+</div>

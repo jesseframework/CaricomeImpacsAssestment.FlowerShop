@@ -1,0 +1,11 @@
+﻿body {
+}
+.hover-footer {
+    display: none;
+}
+
+/* Show the Add to Cart button when the card is hovered */
+.card-hover:hover .hover-footer {
+    display: block;
+}
+

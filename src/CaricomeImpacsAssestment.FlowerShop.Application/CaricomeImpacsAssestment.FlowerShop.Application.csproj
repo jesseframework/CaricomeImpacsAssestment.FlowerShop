@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>CaricomeImpacsAssestment.FlowerShop</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Order\AddCookieTrackerAppService.cs" />
+    <Compile Remove="Order\HttpAccessForBrowser.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CaricomeImpacsAssestment.FlowerShop.Domain\CaricomeImpacsAssestment.FlowerShop.Domain.csproj" />
+    <ProjectReference Include="..\CaricomeImpacsAssestment.FlowerShop.Application.Contracts\CaricomeImpacsAssestment.FlowerShop.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Volo.Abp.Account.Application" Version="7.4.2" />
+    <PackageReference Include="Volo.Abp.Identity.Application" Version="7.4.2" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="7.4.2" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Application" Version="7.4.2" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Application" Version="7.4.2" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Application" Version="7.4.2" />
+  </ItemGroup>
+
+</Project>
