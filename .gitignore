@@ -263,3 +263,5 @@ src/CaricomeImpacsAssestment.FlowerShop.Blazor.Server.Tiered/Logs/*
 
 # Use abp install-libs to restore.
 **/wwwroot/libs/*
+/src/CaricomeImpacsAssestment.FlowerShop.Web/appsettings.json
+/src/CaricomeImpacsAssestment.FlowerShop.DbMigrator/appsettings.json
