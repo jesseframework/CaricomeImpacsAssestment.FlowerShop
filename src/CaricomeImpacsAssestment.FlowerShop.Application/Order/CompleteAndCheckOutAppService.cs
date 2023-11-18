@@ -1,6 +1,10 @@
 ﻿using CaricomeImpacsAssestment.FlowerShop.AppLogger;
 using CaricomeImpacsAssestment.FlowerShop.Customer;
 using CaricomeImpacsAssestment.FlowerShop.Order.Dto;
+using CaricomeImpacsAssestment.FlowerShop.Order.Manager;
+using CaricomeImpacsAssestment.FlowerShop.Payment;
+using CaricomeImpacsAssestment.FlowerShop.Payment.Dto;
+using CaricomeImpacsAssestment.FlowerShop.Product;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -11,6 +15,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
 
 namespace CaricomeImpacsAssestment.FlowerShop.Order
 {
@@ -23,27 +28,51 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         IOrderHeaderAppService
     {
         private readonly IRepository<OrderHeader, Guid> _orderHeaderRepository;
+        private readonly IRepository<Coupon, Guid> _couponRepository;
+        private readonly IRepository<OrderDetail, Guid> _orderDetailRepository;
+        private readonly IRepository<OrderPayment, Guid> _orderPaymentRepository;
+        private readonly IItemAppService _itemAppService;
         private readonly ICustomerAccountAppService _customerAccountAppService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly ICookieTrackerAppService _cookieTrackerAppService;
-        private readonly IRepository<CookieTracker, Guid> _cookieTrackerRepository;
+        //private readonly IRepository<OrderDetailTemp, Guid> _orderDetailTemRepository;
+        private readonly IOrderDetailTempAppService _orderDetailTempAppService;       
+        private readonly UserCookieManager _userCookieManager;
+        private readonly BrowserInfomation _browserInfomation;
+        private readonly CookieService _cookieService;
         public CompleteAndCheckOutAppService(
+            BrowserInfomation browserInfomation,
+            UserCookieManager userCookieManager,
+            CookieService cookieService,
+            IItemAppService itemAppService,
             IRepository<OrderHeader, Guid> orderHeaderRepository,
             ICustomerAccountAppService customerAccountAppService,
-            IHttpContextAccessor httpContextAccessor,
-            ICookieTrackerAppService cookieTrackerAppService,
-            IRepository<CookieTracker, Guid> cookieTrackerRepository) : base(orderHeaderRepository) 
+            //IRepository<OrderDetailTemp, Guid> orderDetailTemRepository,
+            IOrderDetailTempAppService orderDetailTempAppService,
+            IRepository<OrderPayment, Guid> orderPaymentRepository,
+            IRepository<Coupon, Guid> couponRepository,
+            IRepository<OrderDetail, Guid> orderDetailRepository) : base(orderHeaderRepository) 
         {
             _orderHeaderRepository = orderHeaderRepository;
-            _customerAccountAppService = customerAccountAppService;
-            _httpContextAccessor = httpContextAccessor;
-            _cookieTrackerAppService = cookieTrackerAppService;
-            _cookieTrackerRepository = cookieTrackerRepository;
+            _itemAppService = itemAppService;
+            _orderDetailRepository = orderDetailRepository;
+            _orderPaymentRepository = orderPaymentRepository;
+            _orderDetailTempAppService = orderDetailTempAppService;
+            _customerAccountAppService = customerAccountAppService;            
+            _userCookieManager = userCookieManager;
+            _browserInfomation = browserInfomation;
+            _cookieService = cookieService;
+            _couponRepository = couponRepository;
         }
-        public async Task<ResponseStatusCodesDto> CreateCompleteOrderAsync()
+        public async Task<ResponseStatusCodesDto> CreateCompleteOrderAsync(CreateUpdateOrderHeaderDtoMin input)
         {
-            var customerAccountData = await _customerAccountAppService.GetCustomeWithRefrence();
-            if(customerAccountData == null)
+            ValidateCookie validateCookie = new ValidateCookie(
+                    _browserInfomation,
+                    _cookieService,
+                    _userCookieManager);
+
+            
+            List<CreateUpdateOrderDetailDto> orderdetailIst = new List<CreateUpdateOrderDetailDto>();
+            var customerAccountData = await _customerAccountAppService.GetCustomeWithReference();
+            if (customerAccountData == null)
             {
                 return new ResponseStatusCodesDto
                 {
@@ -52,33 +81,243 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                 };
             }
 
-            //GetCookie
-            CookieService cookieService = new CookieService(_httpContextAccessor);
-            var cookieValue = cookieService.GetBrowserCookie;
-            var cookieData = await _cookieTrackerRepository.GetAsync(p => p.Value.Equals(cookieValue));
-            if(cookieData == null)
+            var customerBillingAddress = await _customerAccountAppService.GetCustomeBillingAddressWithReference();
+            if (customerBillingAddress == null)
             {
                 return new ResponseStatusCodesDto
                 {
-                    StatusCode = cookieData == null ? 700 : 800,
-                    StatusMessage = "No Cookie Data Found"
+                    StatusCode = customerBillingAddress == null ? 700 : 800,
+                    StatusMessage = "No Billing Address"
+                };
+            }
+
+            var customerShipToAddress = await _customerAccountAppService.GetCustomeShippingAddressWithReference();
+            if (customerShipToAddress == null)
+            {
+                return new ResponseStatusCodesDto
+                {
+                    StatusCode = customerShipToAddress == null ? 700 : 800,
+                    StatusMessage = "No Shipping Address"
                 };
             }
 
 
+            var checkCookieId = await validateCookie.IsCookieValid();
+
+            var orderDetailTemp = await _orderDetailTempAppService.GetShoppingCartByCookieId(checkCookieId);           
+            if (!orderDetailTemp.Any())
+            {
+                return new ResponseStatusCodesDto
+                {
+                    StatusCode = orderDetailTemp == null ? 700 : 800,
+                    StatusMessage = "No Shopping Cart Found"
+                };
+            }
+
+            var shoppingCartTotal = await _orderDetailTempAppService.GetShoppingCartTotalByCookieId(checkCookieId);
+            if (shoppingCartTotal == null)
+            {
+                return new ResponseStatusCodesDto
+                {
+                    StatusCode = shoppingCartTotal == null ? 700 : 800,
+                    StatusMessage = "No Order Total Found"
+                };
+            }
+
+            double _couponAmount = 0;           
+            int _couponUsageLimit = 0;
+
+            var _couponData = await _couponRepository.GetListAsync(p => 
+                                                     p.Code.Equals(input.YourCouponCode)
+                                                     && p.IsValidFrom <= DateTime.Now
+                                                     && p.IsValidToDate >= DateTime.Now                                                     
+                                                     && p.AmountUsed < p.UsageLimit);
+            if(!_couponData.Any())
+            {
+                _couponAmount = 0;                
+                _couponUsageLimit = 0;
+            }
+            else
+            {
+                // ToDo index is not safe so will remove when i get time
+                if (_couponData[0].CouponType.Equals("Amount"))
+                {
+                    _couponAmount = _couponData[0].DiscountAmount;
+                }
+                else
+                {
+                    //ToDo will not implement for this demo
+                    _couponAmount = _couponData[0].DiscountAmount;
+                }
+                
+                _couponUsageLimit = _couponData[0].UsageLimit;
+            }
+
+            double _totalDueBeforeCoupon = shoppingCartTotal.LineTotal
+                + shoppingCartTotal.TaxAmount
+                + shoppingCartTotal.Shipping;
+
+            double _totalDueAfterCoupon = _totalDueBeforeCoupon - _couponAmount;
+
+            //ToDo If you have more time validate calculation
             var saveOrderHeader = new CreateUpdateOrderHeaderDto()
             {
                 OrderNo = "",
-                CookieTrackerId = cookieData.Id,
+                CookieTrackerId = checkCookieId,
                 OrderDate = DateTime.Now,
+                CustomerAccountId = customerAccountData.account.Id,
+                BillToAddressId = customerBillingAddress.address.Id,
+                ShipToAddressId = customerShipToAddress.address.Id,
+                SubTotal = shoppingCartTotal.SubTotal,
+                Status = "Draft",
+                TaxAmount = shoppingCartTotal.TaxAmount,
+                TotalAmount = shoppingCartTotal.LineTotal,
+                Shipping = shoppingCartTotal.Shipping,
+                TotalDiscount = shoppingCartTotal.LineDiscount + _couponAmount,
+                CouponCode = input.YourCouponCode,
+                TotalDue = _totalDueAfterCoupon
 
             };
+
+            var saveCartHeader = ObjectMapper.Map<CreateUpdateOrderHeaderDto, OrderHeader>(saveOrderHeader);
+            await _orderHeaderRepository.InsertAsync(saveCartHeader);
+
+            foreach (var detail in orderDetailTemp)
+            {
+                var saveOrderDetail = new CreateUpdateOrderDetailDto()
+                {
+                    ItemId = detail.ItemId,
+                    OrderNo = detail.OrderNo,
+                    CookieTrackerId = detail.CookieTrackerId,
+                    OrderDate = DateTime.Now,
+                    TaxID = detail.TaxID,
+                    Status = "Draft",
+                    CategoryId = detail.CategoryId,
+                    ProductGroupId = detail.ProductGroupId,
+                    Decription = detail.Decription,
+                    ExchangeRate = detail.ExchangeRate,
+                    Quantity = detail.Quantity,
+                    UnitPrice = detail.UnitPrice,
+                    ListPrice = detail.ListPrice,
+                    TaxAmount = detail.TaxAmount,
+                    LineDiscount = detail.LineDiscount,
+                    SubTotal = detail.SubTotal,
+                    LineTotal = detail.LineTotal,
+                    OrderHeaderId = saveCartHeader.Id
+
+                };
+
+                orderdetailIst.Add(saveOrderDetail);
+
+            }
+
+            var saveCartDetail = ObjectMapper.Map<List<CreateUpdateOrderDetailDto>, List<OrderDetail>>(orderdetailIst);
+            await _orderDetailRepository.InsertManyAsync(saveCartDetail);
+
 
             return new ResponseStatusCodesDto
             {
                 StatusCode = 800,
                 StatusMessage = "Order complete successfull"
             };
+        }
+
+        public async Task<ResponseStatusCodesDto> CreateOrderConfirmation(string tenderType, string paymentNo)
+        {
+            ValidateCookie validateCookie = new ValidateCookie(
+                    _browserInfomation,
+                    _cookieService,
+                    _userCookieManager);
+            var checkCookieId = await validateCookie.IsCookieValid();
+
+            var _header = await _orderHeaderRepository.SingleOrDefaultAsync(p => p.CookieTrackerId == checkCookieId);
+            if (_header == null)
+            {
+                return new ResponseStatusCodesDto
+                {
+                    StatusCode = _header == null ? 700 : 800,
+                    StatusMessage = "No Header Found"
+                };
+            }
+            else
+            {
+                _header.Status = "Success";
+                await _orderHeaderRepository.UpdateAsync(_header);
+            }
+
+            var _detail = await _orderDetailRepository.GetListAsync(p => p.CookieTrackerId == checkCookieId);
+            if (_detail.Any())
+            {
+                List<OrderDetail> orderDetails = new List<OrderDetail>();
+                bool ChangeMade = false;
+                foreach (var item in _detail)
+                {
+                    var _detailUpdate = await _orderDetailRepository.SingleOrDefaultAsync(p => p.Id == item.Id);
+                    if (_detailUpdate != null)
+                    {
+                        _detailUpdate.Status = "Success";
+                        ChangeMade = true;
+                    }
+
+                    orderDetails.Add(_detailUpdate);
+
+                }
+                if (ChangeMade == true)
+                    await _orderDetailRepository.UpdateManyAsync(orderDetails);
+            }
+            else
+            {
+                _header.Status = "Success";
+                await _orderHeaderRepository.UpdateAsync(_header);
+            }
+            var savePayment = new CreateUpdateOrderPaymentDto()
+            {
+                OrderNo = _header.OrderNo,
+                PaymentDate = DateTime.Now,
+                Status = "Success",
+                CustomerAccountId = _header.CustomerAccountId,
+                OrderHeaderId = _header.Id,
+                OrderAmount = _header.TotalAmount,
+                AmountPay = _header.TotalAmount,
+                OrderBalance = _header.TotalAmount - _header.TotalDue,
+                TenderType = tenderType,
+                PaymentNo = paymentNo //Come from payment gateway
+            };
+
+            var saveCartPayment = ObjectMapper.Map<CreateUpdateOrderPaymentDto, OrderPayment>(savePayment);
+            await _orderPaymentRepository.InsertAsync(saveCartPayment);
+
+            return new ResponseStatusCodesDto
+            {
+                StatusCode = 800,
+                StatusMessage = "Payment complete successfull"
+            };
+
+
+        }
+        public async Task<OrderHeaderDto> GetOrderConfimTotalByCookieId(Guid cookieId)
+        {
+            
+            //ToDo Add paramater to this before going to the db. I wish i have more time
+            var _orderHeader = await _orderHeaderRepository.GetListAsync();
+
+
+            var mapOrderHeader = ObjectMapper.Map<List<OrderHeader>, List<OrderHeaderDto>>(_orderHeader);
+
+            var orderHeaderData = await _orderHeaderRepository.GetListAsync(p => p.CookieTrackerId == cookieId
+                                                                            && p.Status.Equals("Draft"));
+            var orderHeaderQuery = (from header in orderHeaderData
+                                    group header by header.CookieTrackerId into g
+                                  select new OrderHeaderDto
+                                  {
+                                      SubTotal = g.Sum(x => x.SubTotal),
+                                      TotalDue = g.Sum(x => x.TotalDue),
+                                      Shipping = g.Sum(x => x.Shipping),
+                                      TaxAmount = g.Sum(x => x.TaxAmount),
+                                      TotalDiscount = g.Sum(x => x.TotalDiscount),
+                                  }).FirstOrDefault();
+
+            return orderHeaderQuery;
         }
     }
 }

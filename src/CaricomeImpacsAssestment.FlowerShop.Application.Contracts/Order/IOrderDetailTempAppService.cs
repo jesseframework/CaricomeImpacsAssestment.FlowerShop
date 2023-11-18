@@ -15,6 +15,10 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                                         PagedAndSortedResultRequestDto,
                                         CreateUpdateOrderDetailTempDto>
     {
-        Task<ResponseStatusCodesDto> CreateShoppingCart(CreateUpdateOrderDetailTempDto input);
+        Task<ResponseStatusCodesDto> CreateShoppingCart(CreateUpdateOrderDetailTempMin input);
+        Task<List<OrderDetailTempDto>> GetShoppingCartByCookieId(Guid cookieId);
+        Task<OrderDetailTempDto> GetShoppingCartTotalByCookieId(Guid cookieId);
+        Task<OrderDetailTempDto> GetShoppingCartAmountByCookieId(Guid cookieId);
+        Task<List<OrderWithItemDataDto>> GetShoppingCartForCheckOut(Guid cookieId);
     }
 }

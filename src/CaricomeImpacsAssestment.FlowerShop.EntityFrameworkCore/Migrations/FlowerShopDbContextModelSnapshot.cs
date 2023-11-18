@@ -363,7 +363,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("AddressId")
+                    b.Property<Guid>("BillingAddressId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -429,18 +429,23 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<Guid>("ShippingAddressId")
+                        .HasColumnType("char(36)");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
+                    b.HasIndex("BillingAddressId");
 
                     b.HasIndex("ContactId");
 
                     b.HasIndex("CountryId");
 
                     b.HasIndex("CurrencyId");
+
+                    b.HasIndex("ShippingAddressId");
 
                     b.ToTable("AppCustomerAccounts", (string)null);
                 });
@@ -619,6 +624,9 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                     b.Property<double>("Quantity")
                         .HasColumnType("double");
 
+                    b.Property<double>("Shipping")
+                        .HasColumnType("double");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -734,6 +742,9 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                     b.Property<double>("Quantity")
                         .HasColumnType("double");
 
+                    b.Property<double>("Shipping")
+                        .HasColumnType("double");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -776,6 +787,12 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)")
                         .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<Guid>("CookieTrackerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CouponCode")
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime(6)")
@@ -825,16 +842,23 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                     b.Property<Guid>("ShipToAddressId")
                         .HasColumnType("char(36)");
 
+                    b.Property<double>("Shipping")
+                        .HasColumnType("double");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<double>("SubTotal")
                         .HasColumnType("double");
 
                     b.Property<double>("TaxAmount")
                         .HasColumnType("double");
 
-                    b.Property<double>("TaxTotal")
+                    b.Property<double>("TotalAmount")
                         .HasColumnType("double");
 
-                    b.Property<double>("TotalAmount")
+                    b.Property<double>("TotalDiscount")
                         .HasColumnType("double");
 
                     b.Property<double>("TotalDue")
@@ -852,6 +876,91 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                     b.HasIndex("ShipToAddressId");
 
                     b.ToTable("AppOrderHeaders", (string)null);
+                });
+
+            modelBuilder.Entity("CaricomeImpacsAssestment.FlowerShop.Payment.Coupon", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("AmountUsed")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("CouponName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CouponType")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<double>("DiscountAmount")
+                        .HasColumnType("double");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTime>("IsValidFrom")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("IsValidToDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("char(36)")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<double>("PercentageAmount")
+                        .HasColumnType("double");
+
+                    b.Property<int>("UsageLimit")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Coupons");
                 });
 
             modelBuilder.Entity("CaricomeImpacsAssestment.FlowerShop.Payment.OrderPayment", b =>
@@ -924,6 +1033,10 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("PaymentNo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -1205,6 +1318,9 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<double>("SellCost")
+                        .HasColumnType("double");
+
+                    b.Property<double>("ShippingCost")
                         .HasColumnType("double");
 
                     b.Property<DateTime>("To")
@@ -3087,7 +3203,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                 {
                     b.HasOne("CaricomeImpacsAssestment.FlowerShop.Customer.Address", null)
                         .WithMany()
-                        .HasForeignKey("AddressId")
+                        .HasForeignKey("BillingAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -3106,6 +3222,12 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                     b.HasOne("CaricomeImpacsAssestment.FlowerShop.Customer.Currency", null)
                         .WithMany()
                         .HasForeignKey("CurrencyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CaricomeImpacsAssestment.FlowerShop.Customer.Address", null)
+                        .WithMany()
+                        .HasForeignKey("ShippingAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

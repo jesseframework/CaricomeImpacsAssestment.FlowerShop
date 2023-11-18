@@ -1,0 +1,327 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using CaricomeImpacsAssestment.FlowerShop.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR;
+@using Volo.Abp.Users
+@model CaricomeImpacsAssestment.FlowerShop.Web.Pages.Signup.IndexModel
+@inject IHtmlLocalizer<FlowerShopResource> L
+@inject ICurrentUser CurrentUser
+@section styles {
+    <abp-style src="/Pages/Signup/Index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css" integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+   
+}
+@section scripts {
+    <abp-script src="/Pages/Signup/Index.js" />
+    <abp-script type="typeof(SignalRBrowserScriptContributor)" />
+
+}
+<div class="container">
+
+    <div class="row">
+        <div class="col-xl-8">
+
+            <div class="card">
+                <div class="card-body">
+                    <ol class="activity-checkout mb-0 px-4 mt-3">
+                        <li class="checkout-item">
+                            <div class="avatar checkout-icon p-1">
+                                <div class="avatar-title rounded-circle bg-primary">
+                                    <i class="bx bx-user-plus text-white font-size-20"></i>
+                                </div>
+                            </div>
+                            <div class="feed-item-list">
+                                <div>
+                                    <h5 class="font-size-16 mb-1">Login Info</h5>
+                                    <p class="text-muted text-truncate mb-4">Enter your login information to create account</p>
+                                    <div class="mb-3">
+                                        <form>
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="billing-name">Name</label>
+                                                            <input type="text" class="form-control" id="billing-name" placeholder="Enter name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="billing-email-address">Email Address</label>
+                                                            <input type="email" class="form-control" id="billing-email-address" placeholder="Enter email">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="billing-phone">Phone</label>
+                                                            <input type="text" class="form-control" id="billing-phone" placeholder="Enter Phone no.">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                               
+
+                                                <div class="row">
+                                                    
+
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-4 mb-lg-0">
+                                                            <label class="form-label" for="password">Password</label>
+                                                            <input type="text" class="form-control" id="password" placeholder="Enter Password">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-0">
+                                                            <label class="form-label" for="password">Confirm Password</label>
+                                                            <input type="text" class="form-control" id="confirmpassword" placeholder="Enter Confirm Password">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checkout-item">
+                            <div class="avatar checkout-icon p-1">
+                                <div class="avatar-title rounded-circle bg-primary">
+                                    <i class="bx bxs-receipt text-white font-size-20"></i>
+                                </div>
+                            </div>
+                            <div class="feed-item-list">
+                                <div>
+                                    <h5 class="font-size-16 mb-1">Billing Info</h5>
+                                    <p class="text-muted text-truncate mb-4">Enter your billing address</p>
+                                    <div class="mb-3">
+                                        <form>
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="billing-name">Name</label>
+                                                            <input type="text" class="form-control" id="billing-name" placeholder="Enter name">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="billing-email-address">Email Address</label>
+                                                            <input type="email" class="form-control" id="billing-email-address" placeholder="Enter email">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="billing-phone">Phone</label>
+                                                            <input type="text" class="form-control" id="billing-phone" placeholder="Enter Phone no.">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="billing-address">Address</label>
+                                                    <textarea class="form-control" id="billing-address" rows="3" placeholder="Enter full address"></textarea>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-4 mb-lg-0">
+                                                            <label class="form-label">Country</label>
+                                                            <select class="form-control form-select" title="Country">
+                                                                <option value="0">Select Country</option>
+                                                                <option value="AF">Afghanistan</option>
+                                                                <option value="AL">Albania</option>
+                                                                <option value="DZ">Algeria</option>
+                                                                <option value="AS">American Samoa</option>
+                                                                <option value="AD">Andorra</option>
+                                                                <option value="AO">Angola</option>
+                                                                <option value="AI">Anguilla</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-4 mb-lg-0">
+                                                            <label class="form-label" for="billing-city">City</label>
+                                                            <input type="text" class="form-control" id="billing-city" placeholder="Enter City">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-0">
+                                                            <label class="form-label" for="zip-code">Zip / Postal code</label>
+                                                            <input type="text" class="form-control" id="zip-code" placeholder="Enter Postal code">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="checkout-item">
+                            <div class="avatar checkout-icon p-1">
+                                <div class="avatar-title rounded-circle bg-primary">
+                                    <i class="bx bxs-truck text-white font-size-20"></i>
+                                </div>
+                            </div>
+                            <div class="feed-item-list">
+                                <div>
+                                    <h5 class="font-size-16 mb-1">Shipping Info</h5>
+                                    <p class="text-muted text-truncate mb-4">Enter your shipping address</p>
+                                    <div class="mb-3">
+                                        
+                                        <div class="mb-3">
+                                            <form>
+                                                <div>
+                                                    <div class="row">
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="billing-name">Name</label>
+                                                                <input type="text" class="form-control" id="billing-name" placeholder="Enter name">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="billing-email-address">Email Address</label>
+                                                                <input type="email" class="form-control" id="billing-email-address" placeholder="Enter email">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="billing-phone">Phone</label>
+                                                                <input type="text" class="form-control" id="billing-phone" placeholder="Enter Phone no.">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="billing-address">Address</label>
+                                                        <textarea class="form-control" id="billing-address" rows="3" placeholder="Enter full address"></textarea>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-4 mb-lg-0">
+                                                                <label class="form-label">Country</label>
+                                                                <select class="form-control form-select" title="Country">
+                                                                    <option value="0">Select Country</option>
+                                                                    <option value="AF">Afghanistan</option>
+                                                                    <option value="AL">Albania</option>
+                                                                    <option value="DZ">Algeria</option>
+                                                                    <option value="AS">American Samoa</option>
+                                                                    <option value="AD">Andorra</option>
+                                                                    <option value="AO">Angola</option>
+                                                                    <option value="AI">Anguilla</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-4 mb-lg-0">
+                                                                <label class="form-label" for="billing-city">City</label>
+                                                                <input type="text" class="form-control" id="billing-city" placeholder="Enter City">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-0">
+                                                                <label class="form-label" for="zip-code">Zip / Postal code</label>
+                                                                <input type="text" class="form-control" id="zip-code" placeholder="Enter Postal code">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="row my-4">
+                <div class="col">
+                    <a href="ecommerce-products.html" class="btn btn-link text-muted">
+                        <i class="mdi mdi-arrow-left me-1"></i> Continue Shopping
+                    </a>
+                </div> <!-- end col -->
+                <div class="col">
+                    <div class="text-end mt-2 mt-sm-0">
+                        <a href="#" class="btn btn-success">
+                            <i class="mdi mdi-cart-outline me-1"></i> Procced
+                        </a>
+                    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row-->
+
+        </div>
+        <div class="col-lg-4">
+            <div class="card position-sticky top-0">
+                <div class="p-3 bg-light bg-opacity-10">
+                    <div class="p-3 bg-light mb-3">
+                        <h5 class="font-size-16 mb-0">
+                            Order Summary
+                            <span class="float-end ms-2">#MN0124</span>
+                        </h5>
+                    </div>
+
+
+                    <!-- Product Row -->
+                    <div class="d-flex mb-2">
+                        <div class="product-image" style="width: 110px;">
+                            <img src="https://www.bootdey.com/image/280x280/FF00FF/000000" alt="product-img" title="product-img" class="avatar-lg rounded">
+                        </div>
+                        <div class="product-desc flex-grow-1 ms-2">
+                            <h5 class="font-size-16 text-truncate">
+                                <a href="#" class="text-dark">Waterproof Mobile Phone</a>
+                            </h5>
+                            <p class="text-muted mb-0">
+                                <i class="bx bxs-star text-warning"></i>
+                                <i class="bx bxs-star text-warning"></i>
+                                <i class="bx bxs-star text-warning"></i>
+                                <i class="bx bxs-star text-warning"></i>
+                                <i class="bx bxs-star-half text-warning"></i>
+                            </p>
+                            <p class="text-muted mb-0 mt-1">$ 260 x 2</p>
+                        </div>
+                        <div class="product-price">
+                            $ 520
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-between mb-1 small">
+                        <span>Subtotal</span> <span>$677</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1 small">
+                        <span>Tax</span> <span>$655</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1 small">
+                        <span>Shipping</span> <span>$677</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1 small">
+                        <span>Coupon (Code: NEWYEAR)</span> <span class="text-danger">-$7788</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-4 small">
+                        <span>TOTAL</span> <strong class="text-dark">7766</strong>
+                    </div>
+                    
+                    
+                </div>
+
+
+
+             
+
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- end row -->
+
+</div>

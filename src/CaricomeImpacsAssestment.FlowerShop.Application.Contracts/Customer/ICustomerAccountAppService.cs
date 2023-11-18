@@ -13,7 +13,9 @@ namespace CaricomeImpacsAssestment.FlowerShop.Customer
                                         PagedAndSortedResultRequestDto,
                                         CreateUpdateCustomerAccountDto>
     {
-        Task<List<CustomerAllDto>> GetAllCustomersWithRefrence();
-        Task<CustomerAllDto> GetCustomeWithRefrence();
+        Task<List<CustomerAllDto>> GetAllCustomersWithReference();
+        Task<CustomerAllDto> GetCustomeWithReference();
+        Task<CustomerAllDto> GetCustomeBillingAddressWithReference();
+        Task<CustomerAllDto> GetCustomeShippingAddressWithReference();
     }
 }

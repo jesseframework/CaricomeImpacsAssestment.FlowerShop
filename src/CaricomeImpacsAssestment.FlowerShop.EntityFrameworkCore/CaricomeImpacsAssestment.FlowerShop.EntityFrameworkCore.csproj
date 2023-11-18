@@ -9,6 +9,42 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\OldMigration\**" />
+    <EmbeddedResource Remove="Migrations\OldMigration\**" />
+    <None Remove="Migrations\OldMigration\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20231115150227_InitalFlowerShopDBCreation.cs" />
+    <Compile Remove="Migrations\20231115150227_InitalFlowerShopDBCreation.Designer.cs" />
+    <Compile Remove="Migrations\20231115172958_InitalFlowerShopDBCreation_001.cs" />
+    <Compile Remove="Migrations\20231115172958_InitalFlowerShopDBCreation_001.Designer.cs" />
+    <Compile Remove="Migrations\20231115175517_InitalFlowerShopDBCreation_005.cs" />
+    <Compile Remove="Migrations\20231115175517_InitalFlowerShopDBCreation_005.Designer.cs" />
+    <Compile Remove="Migrations\20231115213336_InitalFlowerShopDBCreation_006.cs" />
+    <Compile Remove="Migrations\20231115213336_InitalFlowerShopDBCreation_006.Designer.cs" />
+    <Compile Remove="Migrations\20231115220338_InitalFlowerShopDBCreation_007.cs" />
+    <Compile Remove="Migrations\20231115220338_InitalFlowerShopDBCreation_007.Designer.cs" />
+    <Compile Remove="Migrations\20231116041053_InitalFlowerShopDBCreation_009.cs" />
+    <Compile Remove="Migrations\20231116041053_InitalFlowerShopDBCreation_009.Designer.cs" />
+    <Compile Remove="Migrations\20231117041849_CookieManager.cs" />
+    <Compile Remove="Migrations\20231117041849_CookieManager.Designer.cs" />
+    <Compile Remove="Migrations\20231118092943_AddShippingAndCoupon.cs" />
+    <Compile Remove="Migrations\20231118092943_AddShippingAndCoupon.Designer.cs" />
+    <Compile Remove="Migrations\20231118094003_AddShippingAndCoupon_001.cs" />
+    <Compile Remove="Migrations\20231118094003_AddShippingAndCoupon_001.Designer.cs" />
+    <Compile Remove="Migrations\20231118103013_AddShippingAndCoupon_002.cs" />
+    <Compile Remove="Migrations\20231118103013_AddShippingAndCoupon_002.Designer.cs" />
+    <Compile Remove="Migrations\20231118125819_AddBillingAndShippingAdFix_001.cs" />
+    <Compile Remove="Migrations\20231118130450_AddBillingAndShippingAdFix_002.cs" />
+    <Compile Remove="Migrations\20231118130450_AddBillingAndShippingAdFix_002.Designer.cs" />
+    <Compile Remove="Migrations\20231118133152_AddBillingAndShippingAdFix_101.cs" />
+    <Compile Remove="Migrations\20231118133152_AddBillingAndShippingAdFix_101.Designer.cs" />
+    <Compile Remove="Migrations\20231118133955_AddBillingLink.cs" />
+    <Compile Remove="Migrations\20231118133955_AddBillingLink.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CaricomeImpacsAssestment.FlowerShop.Domain\CaricomeImpacsAssestment.FlowerShop.Domain.csproj" />
     <PackageReference Include="Volo.Abp.EntityFrameworkCore.MySQL" Version="7.4.2" />
     <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="7.4.2" />

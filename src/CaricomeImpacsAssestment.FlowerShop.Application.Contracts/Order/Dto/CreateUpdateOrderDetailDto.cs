@@ -6,6 +6,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Dto
     {
         public string OrderNo { get; set; }
         public Guid CustomerAccountId { get; set; }
+        public Guid CookieTrackerId { get; set; }
         public DateTime OrderDate { get; set; }
         public string TaxID { get; set; }
         public string Status { get; set; }
@@ -22,6 +23,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Dto
         public double LineDiscount { get; set; }
         public double SubTotal { get; set; }
         public double LineTotal { get; set; }
+        public double Shipping { get; set; }
         public Guid OrderHeaderId { get; set; }
     }
 }

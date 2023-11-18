@@ -6,6 +6,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Payment.Dto
     {
         public string OrderNo { get; set; }
         public DateTime PaymentDate { get; set; }
+        public string Status { get; set; }
         public Guid CustomerAccountId { get; set; }
         public Guid OrderHeaderId { get; set; }
         public double OrderAmount { get; set; }

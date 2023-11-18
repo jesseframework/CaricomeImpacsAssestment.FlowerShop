@@ -1,4 +1,5 @@
-﻿using CaricomeImpacsAssestment.FlowerShop.Product;
+﻿using CaricomeImpacsAssestment.FlowerShop.Order;
+using CaricomeImpacsAssestment.FlowerShop.Product;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Threading.Tasks;
@@ -9,9 +10,12 @@ namespace CaricomeImpacsAssestment.FlowerShop.Web
     public class DateUpdateHub : AbpHub
     {
         private readonly IItemAppService _itemAppService;
-        public DateUpdateHub(IItemAppService itemAppService)
+        private readonly IOrderDetailTempAppService _orderDetailTempAppService;
+        public DateUpdateHub(IItemAppService itemAppService,
+            IOrderDetailTempAppService orderDetailTempAppService)
         {
             _itemAppService = itemAppService;
+            _orderDetailTempAppService = orderDetailTempAppService;
         }
 
         public async Task BroadcastDateUpdate(DateTime updatedDate)

@@ -1,6 +1,8 @@
+using CaricomeImpacsAssestment.FlowerShop.Customer;
 using CaricomeImpacsAssestment.FlowerShop.EntityFrameworkCore;
 using CaricomeImpacsAssestment.FlowerShop.Localization;
 using CaricomeImpacsAssestment.FlowerShop.MultiTenancy;
+using CaricomeImpacsAssestment.FlowerShop.Order;
 using CaricomeImpacsAssestment.FlowerShop.Web.Menus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
@@ -71,6 +73,7 @@ public class FlowerShopWebModule : AbpModule
                 options.AddAudiences("FlowerShop");
                 options.UseLocalServer();
                 options.UseAspNetCore();
+
             });
         });
     }
@@ -91,8 +94,13 @@ public class FlowerShopWebModule : AbpModule
         
 
         var services = context.Services;
+        services.AddRazorPages();
         services.AddHttpContextAccessor();
         services.AddSignalR();
+        services.AddTransient<IOrderDetailTempAppService, AddToShoppingCardAppService>();
+        services.AddTransient<IOrderHeaderAppService, CompleteAndCheckOutAppService>();
+        services.AddTransient<ICookieTrackerAppService, CookieAppService>();
+        services.AddTransient<ICustomerAccountAppService, CustomerAccountAppService>();
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)

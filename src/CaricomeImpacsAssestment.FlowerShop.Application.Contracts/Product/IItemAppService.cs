@@ -15,5 +15,6 @@ namespace CaricomeImpacsAssestment.FlowerShop.Product
     {
         Task<List<ItemsAllJoinDto>> GetAllItems();
         Task<ItemsAllJoinDto> GetItems(Guid Id);
+        Task<List<ItemsAllJoinDto>> GetItemsByCatgory(ItemSearchDto input);
     }
 }

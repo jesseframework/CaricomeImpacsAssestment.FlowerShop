@@ -1,4 +1,4 @@
-﻿@page
+﻿@page 
 @using Microsoft.AspNetCore.Mvc.Localization
 @using CaricomeImpacsAssestment.FlowerShop.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR;
@@ -8,6 +8,8 @@
 @inject ICurrentUser CurrentUser
 @section styles {
     <abp-style src="/Pages/Shop/Index.css" />
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 }
 @section scripts {
     <abp-script src="/Pages/Shop/Index.js" />
@@ -16,55 +18,38 @@
 }
 <div class="container">
     
-    <div class="row mb-4">
-        <div class="col-12">
-            <img src="/Pages/images/path_to_your_banner_image.jpg" alt="Banner" class="img-fluid w-100">
-        </div>
-    </div>
     <div class="row">
-       
-        <div class="col-md-9">
-            <div class="row">
-                @foreach (var product in Model.ItemsList)
-                {
-                    <div class="col-md-3 mb-4">
+        @foreach (var product in Model.ItemsList)
+        {
+                <div class="col-md-3">
+                <div class="ibox">
+                <div class="ibox-content product-box" style="padding-top: 2px; padding-left: 2px; padding-right: 2px; padding-left: 2px;">
+                    <div class="product-imitation" style="padding-top: 0px; padding-bottom: 0px;">
                         <a href="/product/detail/@product.allItems.Id" class="text-decoration-none">
-                            <div class="card h-95 card-hover">
-                                <img src="@product.allItems.IconUrl" alt="@product.allItems.Name" class="card-img-top">
-                                <div class="card-body">
-                                    <h6 class="card-title text-center">@product.allItems.Name</h6>
-                                    <h4 class="card-text text-center">@product.price.SellCost</h4>
-
-                                </div>
-                            </div>
+                            <img src="@product.allItems.IconUrl" alt="@product.allItems.Name" style="width: 100%; height: auto;">
                         </a>
-                        <div class="card-footer hover-footer">
-                            <button class="btn btn-success">Add to Cart</button>
+
+                        </div>
+                        <div class="product-desc" style="text-align:center">
+                            <span class="product-price">
+                            $@product.price.SellCost
+                            </span>
+                            @* <small class="text-muted">Category</small> *@
+                            @* <a href="#" class="product-name"> Product</a> *@
+
+                            <div class="small m-t-xs">
+                                @product.allItems.Name
+                            </div>
+                            <div class="m-t text-righ">
+                                <hr />
+                            <a href="#" class="btn btn-xs btn-outline btn-primary">Add To Cart <i class="fa fa-cart-plus" ></i> </a>
+                            </div>
                         </div>
                     </div>
-                }
+                </div>
             </div>
-        </div>
-    
-    
-        <div class="col-md-3">
-            <div class="list-group">
-                @foreach (var group in Model.ItemsList)
-                {
-                    <button type="button" class="list-group-item list-group-item-action" onclick="filterProducts('@group.productGroup.Id')">
-                        @group.productGroup.Name
-                    </button>
-                }
-            </div>
-        </div>
-    </div>
-
-
-    <script>
-        function filterProducts(groupId) {
-            // Implement the logic to filter products based on the selected group.
-            // This might involve an AJAX call to the server to fetch filtered products,
-            // or you could implement client-side filtering if all products are already loaded on the page.
         }
-    </script>
+    </div>
+      
+    
 </div>

@@ -14,63 +14,58 @@
 }
 
 <div class="container">
-    <abp-carousel indicators="true" controls="true">
-        <abp-carousel-item src="/Pages/images/images.jpeg"></abp-carousel-item>
-        <abp-carousel-item src="/Pages/images/DALL·EValentine's Day theme for a flower shop website. It feature.png"></abp-carousel-item>
-        <abp-carousel-item src="/Pages/images/images3.jpeg"></abp-carousel-item>
-    </abp-carousel>
-
-    <div class="container">
-        @for (var i = 0; i < Model.CategoryList.Count; i += 3)
-        {
-            <div class="row">
-                @for (var j = i; j < i + 3 && j < Model.CategoryList.Count; j++)
-                {
-                    var category = Model.CategoryList[j];
-                    <div class="col-sm-4">
-                        
-                        <a href="@category.Route" class="text-decoration-none">
-                            <div class="banner banner-left align-left valign-middle cursor-pointer banner-font-hover-zoom">
-                                <div class="banner-content">
-                                    <p class="banner-title color-white">@category.Title</p>
-                                    <hr class="divider white horizontal-break">
-                                    <h2 class="banner-subtitle color-white">@category.Subtitle</h2>
-                                </div>
-                                <img src="@category.ImageURL" alt="@category.Title">
-                            </div>
-                        </a>
-                    </div>
-                }
-            </div>
-        }
-    </div>
-
-    @*<style>
-        footer {
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            background-color: #f2f2f2;
-            padding: 20px;
-        }
-    </style>*@
+   
+    
    
 
-    @*<footer>
-        <div style="text-align: center;">
-            <h4>Contact Us</h4>
-            <p>Email: contact@example.com</p>
-            <p>Phone: +123-456-7890</p>
+    <abp-carousel indicators="true" controls="true">
+        <abp-carousel-item src="/Pages/images/slider/sliderimages1.jpg" style="width: 100%; height: 700px;"></abp-carousel-item>
+        <abp-carousel-item src="/Pages/images/slider/sliderimages2.jpg" style="width: 100%; height: 700px;"></abp-carousel-item>
+        <abp-carousel-item src="/Pages/images/slider/sliderimages3.jpg" style="width: 100%; height: 700px;"></abp-carousel-item>
+    </abp-carousel>
+
+  
+    @for (var i = 0; i < Model.CategoryList.Count; i += 6)
+    {
+        <div class="row">
+            @for (var j = i; j < i + 6 && j < Model.CategoryList.Count; j++)
+            {
+                    
+                var category = Model.CategoryList[j];
+                var encodedCategoryTitle = System.Net.WebUtility.UrlEncode(category.Title);
+                var url = $"/shop?categoryName={encodedCategoryTitle}";
+
+                <div class="col-md-2" style="padding-top: 30px;">
+                    <div class="ibox">
+                        <div class="ibox-content product-box" style="padding-top: 2px; padding-left: 2px; padding-right: 2px; padding-left: 2px;">
+                            <div class="product-imitation" style="padding-top: 0px; padding-bottom: 0px;">
+                                <a href=@url class="text-decoration-none">
+                                    <img src="@category.ImageURL" alt="@category.Title" style="width: 100%; height: auto;">
+                                </a>
+
+                            </div>
+                            <div class="product-desc" style="text-align:center">
+                                @* <span class="product-price">
+                                    $@product.price.SellCost
+                                </span> *@
+                                <small class="text-muted">@category.Title</small>
+                                <a href=@url class="product-name"> @category.Subtitle</a>
+
+                                <div class="small m-t-xs">
+                                    @category.Name
+                                </div>
+                                @* <div class="m-t text-righ">
+                                    <hr />
+                                    <a href="#" class="btn btn-xs btn-outline btn-primary">Add To Cart <i class="fa fa-cart-plus"></i> </a>
+                                </div> *@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
-        <div style="text-align: center; margin-top: 20px;">
-            <h4>Company Name</h4>
-            <p>1234 Company Street</p>
-            <p>City, Country</p>
-        </div>
-        <div style="text-align: center; margin-top: 20px;">
-            &copy; 2023 Your Company Name. All Rights Reserved.
-        </div>
-    </footer>*@
- 
+    }
 </div>
+
+   
+ 

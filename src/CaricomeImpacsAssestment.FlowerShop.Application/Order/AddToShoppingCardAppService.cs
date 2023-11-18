@@ -3,8 +3,12 @@ using CaricomeImpacsAssestment.FlowerShop.Customer;
 using CaricomeImpacsAssestment.FlowerShop.Order.Dto;
 using CaricomeImpacsAssestment.FlowerShop.Order.Manager;
 using CaricomeImpacsAssestment.FlowerShop.Product;
+using CaricomeImpacsAssestment.FlowerShop.Product.Dto;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -28,7 +32,15 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         private readonly CookieService _cookieService;
         private readonly UserCookieManager _userCookieManager;        
         private readonly BrowserInfomation _browserInfomation;
+        private readonly IRepository<Category, Guid> _categoryRepository;
+        private readonly IRepository<ProductGroup, Guid> _productgroupRepository;
+        private readonly IRepository<ItemPrice, Guid> _itempricesRepository;
+        private readonly IRepository<Item, Guid> _itemRepository;
         public AddToShoppingCardAppService(
+             IRepository<Category, Guid> categoryRepository,
+            IRepository<ProductGroup, Guid> productgroupRepository,
+            IRepository<ItemPrice, Guid> itempricesRepository,
+            IRepository<Item, Guid> itemRepository,
             BrowserInfomation browserInfomation,            
             CookieService cookieService,
             UserCookieManager userCookieManager,
@@ -40,22 +52,21 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             _cookieService = cookieService;
             _userCookieManager = userCookieManager;           
             _browserInfomation = browserInfomation;
+            _categoryRepository = categoryRepository;
+            _productgroupRepository = productgroupRepository;
+            _itempricesRepository = itempricesRepository;
+            _itemRepository = itemRepository;
         }
-        public async Task<ResponseStatusCodesDto> CreateShoppingCart(CreateUpdateOrderDetailTempDto input)
+        public async Task<ResponseStatusCodesDto> CreateShoppingCart(CreateUpdateOrderDetailTempMin input)
         {
             try
             {
-                Guid cookieId = Guid.NewGuid();
-                var cookieValue = _cookieService.GetBrowserCookie("Browser_Cart_Session");
-                if (!string.IsNullOrEmpty(cookieValue))
-                {
-                    var (Domain, Path) = _browserInfomation.ProcessRequest();
-                    if (!string.IsNullOrEmpty(Domain) && !string.IsNullOrEmpty(Path))
-                    {
-                        cookieId = await _userCookieManager.SaveCookieAsync(cookieValue, Domain, Path);
-                    }
+                ValidateCookie validateCookie = new ValidateCookie(
+                    _browserInfomation,
+                    _cookieService,
+                    _userCookieManager);
 
-                }
+                var checkCookieId = await validateCookie.IsCookieValid();
 
                 var itemAllData = await _itemAppService.GetItems(input.ItemId);
                 if (itemAllData == null)
@@ -73,7 +84,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                 {
                     ItemId = input.ItemId,
                     OrderNo = input.OrderNo,
-                    CookieTrackerId = cookieId,
+                    CookieTrackerId = checkCookieId,
                     OrderDate = DateTime.Now,
                     TaxID = "Tax",
                     Status = "InProgress",
@@ -85,9 +96,11 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                     UnitPrice = itemAllData.price.SellCost,
                     ListPrice = itemAllData.price.SellCost,
                     TaxAmount = 0.15 * itemAllData.price.SellCost,
+                    Shipping = itemAllData.price.ShippingCost,
                     LineDiscount = 0,
                     SubTotal = itemAllData.price.SellCost * input.Quantity,
-                    LineTotal = (0.15 * itemAllData.price.SellCost) + itemAllData.price.SellCost * input.Quantity
+                    LineTotal = (0.15 * itemAllData.price.SellCost) 
+                    + (itemAllData.price.SellCost * input.Quantity) + itemAllData.price.ShippingCost
 
                 };
 
@@ -110,12 +123,109 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                 };
             }
             
+        }
+        public async Task<List<OrderDetailTempDto>> GetShoppingCartByCookieId(Guid cookieId)
+        {
+            List<OrderDetailTempDto> orderDetailTempDto = new List<OrderDetailTempDto>();
 
-
-
+            var ShoppingCard = await _orderdetailTeamRepository
+                .GetListAsync(p => p.CookieTrackerId == cookieId);
+            if (ShoppingCard.Any())
+            {
+                orderDetailTempDto = ObjectMapper.Map<List<OrderDetailTemp>, List<OrderDetailTempDto>>(ShoppingCard);
+            }
+                       
+            return orderDetailTempDto;
+        }
+        public async Task<OrderDetailTempDto> GetShoppingCartTotalByCookieId(Guid cookieId)
+        {
+            var _orderDetailTemp = await _orderdetailTeamRepository.GetListAsync();
             
 
+            var mapOrderDetailTemp = ObjectMapper.Map<List<OrderDetailTemp>, List<OrderDetailTempDto>>(_orderDetailTemp);
+            
+            var orderTempData = await _orderdetailTeamRepository.GetListAsync(p=>p.CookieTrackerId == cookieId);
+            var orderTempQuery = (from detail in orderTempData
+                                  group detail by detail.CookieTrackerId into g
+                                  select new OrderDetailTempDto
+                                  {
+                                      CookieTrackerId = g.Key,                                      
+                                      SubTotal = g.Sum(x => x.SubTotal),
+                                      LineTotal = g.Sum(x => x.LineTotal),
+                                      TaxAmount = g.Sum(x => x.TaxAmount),
+                                      LineDiscount = g.Sum(x => x.LineDiscount),
+                                      Shipping = g.Sum(x => x.Shipping)
+                                  }).FirstOrDefault();
 
+            return orderTempQuery;
         }
+        public async Task<OrderDetailTempDto> GetShoppingCartAmountByCookieId(Guid cookieId)
+        {
+            var _orderDetailTemp = await _orderdetailTeamRepository.GetListAsync();
+
+
+            var mapOrderDetailTemp = ObjectMapper.Map<List<OrderDetailTemp>, List<OrderDetailTempDto>>(_orderDetailTemp);
+
+            var orderTempData = await _orderdetailTeamRepository.GetListAsync(p => p.CookieTrackerId == cookieId);
+            var orderTempQuery = (from detail in orderTempData
+                                  group detail by detail.CookieTrackerId into g
+                                  select new OrderDetailTempDto
+                                  {                                     
+                                      LineTotal = g.Sum(x => x.LineTotal),
+                                      Quantity = g.Count()
+                                  }).FirstOrDefault();
+
+            return orderTempQuery;
+        }
+        public async Task<List<OrderWithItemDataDto>> GetShoppingCartForCheckOut(Guid cookieId)
+        {
+            var _orderDetailTemp = await _orderdetailTeamRepository.GetListAsync();
+
+            var items = await _itemRepository.GetListAsync();           
+            var productGroups = await _productgroupRepository.GetListAsync();
+            var itemPrices = await _itempricesRepository.GetListAsync();
+
+
+            var mapItems = ObjectMapper.Map<List<Item>, List<ItemDto>>(items);            
+            var mapProductGroups = ObjectMapper.Map<List<ProductGroup>, List<ProductGroupDto>>(productGroups);
+            var mapItemPrices = ObjectMapper.Map<List<ItemPrice>, List<ItemPriceDto>>(itemPrices);
+
+
+            var mapOrderDetailTemp = ObjectMapper.Map<List<OrderDetailTemp>, List<OrderDetailTempDto>>(_orderDetailTemp);
+
+            var orderTempData = await _orderdetailTeamRepository.GetListAsync(p => p.CookieTrackerId == cookieId);
+            var orderTempQuery = (from detail in orderTempData                                  
+                                  join productGroup in mapProductGroups on detail.ProductGroupId equals productGroup.Id
+                                  join qitems in mapItems on detail.ItemId equals qitems.Id
+                                  group detail by new 
+                                  { 
+                                    itemName = qitems.Name,
+                                    qitems.Description,
+                                    productGroup.Name,
+                                    qitems.LongDescription,
+                                    qitems.ItemNo,
+                                    qitems.IconUrl,
+                                    qitems.Id
+                                    
+                                  }  into g
+                                  select new OrderWithItemDataDto
+                                  {
+                                      ItemId = g.Key.Id,
+                                      ItemName = g.Key.itemName,
+                                      ShortDescription = g.Key.Description,
+                                      LongDescription = g.Key.LongDescription,
+                                      ItemNo = g.Key.ItemNo,
+                                      Group = g.Key.Name,
+                                      IconUrl = g.Key.IconUrl,
+                                      UnitPrice = g.Sum(x=>x.ListPrice),
+                                      LineTotal = g.Sum(x => x.LineTotal),
+                                      Quantity = g.Sum(x => x.Quantity)
+                                      
+                                  }).ToList();
+
+            return orderTempQuery;
+        }
+
+
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CaricomeImpacsAssestment.FlowerShop.Migrations
 {
     /// <inheritdoc />
-    public partial class InitalFlowerShopDBCreation : Migration
+    public partial class AddFlowerShopMigration001 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,6 +42,14 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Name = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Subtitle = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Title = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ImageURL = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Route = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ExtraProperties = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -200,6 +208,78 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "CookieTrackers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Value = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Domain = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Path = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Expiry = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    IsSecure = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsHttpOnly = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    OrderId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    ExtraProperties = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CookieTrackers", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Coupons",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CouponName = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CouponType = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Code = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DiscountAmount = table.Column<double>(type: "double", nullable: false),
+                    PercentageAmount = table.Column<double>(type: "double", nullable: false),
+                    IsValidFrom = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsValidToDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UsageLimit = table.Column<int>(type: "int", nullable: false),
+                    AmountUsed = table.Column<int>(type: "int", nullable: false),
+                    IsUsed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Coupons", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "AppAddresses",
                 columns: table => new
                 {
@@ -266,7 +346,14 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     IconUrl = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    IsFeatureProduct = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     MarketingImagesUrl = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ItemImagesUrl1 = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ItemImagesUrl2 = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ItemImagesUrl3 = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ExtraProperties = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -305,10 +392,14 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    UserId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Email = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    CustomerNo = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     ContactId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    AddressId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    BillingAddressId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ShippingAddressId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CountryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CurrencyId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     ExtraProperties = table.Column<string>(type: "longtext", nullable: false)
@@ -327,8 +418,14 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                 {
                     table.PrimaryKey("PK_AppCustomerAccounts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AppCustomerAccounts_AppAddresses_AddressId",
-                        column: x => x.AddressId,
+                        name: "FK_AppCustomerAccounts_AppAddresses_BillingAddressId",
+                        column: x => x.BillingAddressId,
+                        principalTable: "AppAddresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppCustomerAccounts_AppAddresses_ShippingAddressId",
+                        column: x => x.ShippingAddressId,
                         principalTable: "AppAddresses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -354,6 +451,69 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "AppOrderDetailTemp",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    OrderNo = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CookieTrackerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    OrderDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    TaxID = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ItemId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CategoryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    ProductGroupId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Decription = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ExchangeRate = table.Column<double>(type: "double", nullable: false),
+                    Quantity = table.Column<double>(type: "double", nullable: false),
+                    UnitPrice = table.Column<double>(type: "double", nullable: false),
+                    ListPrice = table.Column<double>(type: "double", nullable: false),
+                    TaxAmount = table.Column<double>(type: "double", nullable: false),
+                    LineDiscount = table.Column<double>(type: "double", nullable: false),
+                    Shipping = table.Column<double>(type: "double", nullable: false),
+                    SubTotal = table.Column<double>(type: "double", nullable: false),
+                    LineTotal = table.Column<double>(type: "double", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CreationTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    DeletionTime = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppOrderDetailTemp", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppOrderDetailTemp_AppCategories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "AppCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppOrderDetailTemp_AppItems_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "AppItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AppOrderDetailTemp_AppProductGroups_ProductGroupId",
+                        column: x => x.ProductGroupId,
+                        principalTable: "AppProductGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "ItemPrices",
                 columns: table => new
                 {
@@ -373,6 +533,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     BuyCost = table.Column<double>(type: "double", nullable: false),
                     SellCost = table.Column<double>(type: "double", nullable: false),
+                    ShippingCost = table.Column<double>(type: "double", nullable: false),
                     ExtraProperties = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
@@ -404,6 +565,9 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     OrderNo = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    CookieTrackerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     OrderDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CustomerAccountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     BillToAddressId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -412,7 +576,10 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                     SubTotal = table.Column<double>(type: "double", nullable: false),
                     TotalAmount = table.Column<double>(type: "double", nullable: false),
                     TotalDue = table.Column<double>(type: "double", nullable: false),
-                    TaxTotal = table.Column<double>(type: "double", nullable: false),
+                    Shipping = table.Column<double>(type: "double", nullable: false),
+                    TotalDiscount = table.Column<double>(type: "double", nullable: false),
+                    CouponCode = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     ExtraProperties = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ConcurrencyStamp = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false)
@@ -456,6 +623,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     OrderNo = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    CookieTrackerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CustomerAccountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     OrderDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     TaxID = table.Column<string>(type: "longtext", nullable: false)
@@ -467,14 +635,13 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                     ProductGroupId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Decription = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    InvoiceDecription = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     ExchangeRate = table.Column<double>(type: "double", nullable: false),
                     Quantity = table.Column<double>(type: "double", nullable: false),
                     UnitPrice = table.Column<double>(type: "double", nullable: false),
                     ListPrice = table.Column<double>(type: "double", nullable: false),
                     TaxAmount = table.Column<double>(type: "double", nullable: false),
                     LineDiscount = table.Column<double>(type: "double", nullable: false),
+                    Shipping = table.Column<double>(type: "double", nullable: false),
                     SubTotal = table.Column<double>(type: "double", nullable: false),
                     LineTotal = table.Column<double>(type: "double", nullable: false),
                     OrderHeaderId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
@@ -528,6 +695,8 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                     OrderNo = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PaymentDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Status = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     CustomerAccountId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     OrderHeaderId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     OrderAmount = table.Column<double>(type: "double", nullable: false),
@@ -608,9 +777,9 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_AppCustomerAccounts_AddressId",
+                name: "IX_AppCustomerAccounts_BillingAddressId",
                 table: "AppCustomerAccounts",
-                column: "AddressId");
+                column: "BillingAddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppCustomerAccounts_ContactId",
@@ -626,6 +795,11 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                 name: "IX_AppCustomerAccounts_CurrencyId",
                 table: "AppCustomerAccounts",
                 column: "CurrencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppCustomerAccounts_ShippingAddressId",
+                table: "AppCustomerAccounts",
+                column: "ShippingAddressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppItems_CategoryId",
@@ -661,6 +835,21 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AppOrderDetails_ProductGroupId",
                 table: "AppOrderDetails",
+                column: "ProductGroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppOrderDetailTemp_CategoryId",
+                table: "AppOrderDetailTemp",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppOrderDetailTemp_ItemId",
+                table: "AppOrderDetailTemp",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppOrderDetailTemp_ProductGroupId",
+                table: "AppOrderDetailTemp",
                 column: "ProductGroupId");
 
             migrationBuilder.CreateIndex(
@@ -719,10 +908,19 @@ namespace CaricomeImpacsAssestment.FlowerShop.Migrations
                 name: "AppOrderDetails");
 
             migrationBuilder.DropTable(
+                name: "AppOrderDetailTemp");
+
+            migrationBuilder.DropTable(
                 name: "AppOrderPayments");
 
             migrationBuilder.DropTable(
                 name: "AppTaxes");
+
+            migrationBuilder.DropTable(
+                name: "CookieTrackers");
+
+            migrationBuilder.DropTable(
+                name: "Coupons");
 
             migrationBuilder.DropTable(
                 name: "ItemPrices");

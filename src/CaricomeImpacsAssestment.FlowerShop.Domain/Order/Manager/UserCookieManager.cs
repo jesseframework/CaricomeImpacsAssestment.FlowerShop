@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.Users;
 
 namespace CaricomeImpacsAssestment.FlowerShop.Order.Manager
 {
@@ -38,7 +39,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Manager
             };
 
             var userCookieNoInDb = await _cookietrackerRepository
-                .GetListAsync(p=>p.Value.Equals(cookieValue) );
+                .GetListAsync(p=>p.Value.Equals(cookieValue) || p.Expiry < DateTime.Now);
             if (!userCookieNoInDb.Any())
             {
                 await _cookietrackerRepository.InsertAsync(userSessionCookie);
@@ -47,15 +48,18 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Manager
             else
             {
                 var userCookieInDb = await _cookietrackerRepository.GetAsync(p => p.Value.Equals(cookieValue));
-                if (userCookieInDb.Expiry <= DateTime.Now)
+                if (userCookieInDb.Expiry > DateTime.Now)
                 {
                     userCookieInDb.Value = cookieValue;
+                    userCookieInDb.UserId = cookieId; 
+                    userCookieInDb.OrderId = cookieId; 
+
                     changeMade = true;
                     cookieId = userCookieInDb.Id;
                 }
                 if(changeMade == true)
                 {
-                    await _cookietrackerRepository.UpdateAsync(userSessionCookie);
+                    await _cookietrackerRepository.UpdateAsync(userCookieInDb);
                 }
                 
             }

@@ -16,5 +16,6 @@ namespace CaricomeImpacsAssestment.FlowerShop.Product.Dto
         public string UserDefine1 { get; set; }
         public double BuyCost { get; set; }
         public double SellCost { get; set; }
+        public double ShippingCost { get; set; }
     }
 }

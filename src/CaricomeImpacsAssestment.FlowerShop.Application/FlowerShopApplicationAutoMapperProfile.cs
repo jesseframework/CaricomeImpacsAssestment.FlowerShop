@@ -21,6 +21,9 @@ public class FlowerShopApplicationAutoMapperProfile : Profile
         CreateMap<CustomerAccount, CustomerAccountDto>();
         CreateMap<CreateUpdateCustomerAccountDto, CustomerAccount>();
 
+        CreateMap<Coupon, CouponDto>();
+        CreateMap<CreateUpdateCouponDto, Coupon>();
+
         CreateMap<Currency, CurrencyDto>();
         CreateMap<CreateUpdateCurrencyDto, Currency>();
 

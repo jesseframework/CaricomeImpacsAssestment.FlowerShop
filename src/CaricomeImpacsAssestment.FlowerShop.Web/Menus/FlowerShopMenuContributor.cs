@@ -37,9 +37,9 @@ public class FlowerShopMenuContributor : IMenuContributor
         1,
         new ApplicationMenuItem(
             "Shop",
-            l["Menu:Shop"],
+            l["Shop"],
             "/shop",
-            icon: "fas fa-shopping-cart",
+            icon: "fas fa-store",
             order: 1
         )
     );

@@ -24,13 +24,20 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         {
             _cookieTrackerRepository = cookieTrackerRepository;
         }
-        //public async Task GetByCookieUUID(string cookie)
-        //{
-        //    var cookieData = await _cookieTrackerRepository.GetAsync(p=>p.Value.Equals(cookie));
-        //    if (cookieData != null)
-        //    {
+        public async Task<Guid> GetByCookieUUID(string cookieId)
+        {
+           
+            Guid _cookieFromDb = Guid.Empty;
+            var cookieData = await _cookieTrackerRepository.GetListAsync(p => p.Value.Equals(cookieId));
+            if (cookieData.Any())
+            {
+                
+                _cookieFromDb = cookieData[0].Id;
+            }
 
-        //    }
-        //}
+            return _cookieFromDb;
+
+
+        }
     }
 }

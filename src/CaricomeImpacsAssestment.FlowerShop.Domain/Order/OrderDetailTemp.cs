@@ -20,6 +20,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         public double ListPrice { get; set; }
         public double TaxAmount { get; set; }
         public double LineDiscount { get; set; }
+        public double Shipping { get; set; }
         public double SubTotal { get; set; }
         public double LineTotal { get; set; }
     }

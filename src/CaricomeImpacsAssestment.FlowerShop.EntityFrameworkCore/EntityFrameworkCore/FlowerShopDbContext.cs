@@ -73,6 +73,7 @@ public class FlowerShopDbContext :
     public DbSet<ProductGroup> ProductGroups { get; set; }
     public DbSet<Tax> Taxes { get; set; }
     public DbSet<CookieTracker> CookieTrackers { get; set; }
+    public DbSet<Coupon> Coupons { get; set; }
 
 
 
@@ -164,7 +165,8 @@ public class FlowerShopDbContext :
             b.ConfigureByConvention();
             b.HasOne<Country>().WithMany().HasForeignKey(x => x.CountryId);
             b.HasOne<Contact>().WithMany().HasForeignKey(x => x.ContactId);
-            b.HasOne<Address>().WithMany().HasForeignKey(x => x.AddressId);
+            b.HasOne<Address>().WithMany().HasForeignKey(x => x.BillingAddressId);
+            b.HasOne<Address>().WithMany().HasForeignKey(x => x.ShippingAddressId);
             b.HasOne<Currency>().WithMany().HasForeignKey(x => x.CurrencyId);
 
         });
