@@ -23,7 +23,7 @@
         {
                 <div class="col-md-3">
                 <div class="ibox">
-                <div class="ibox-content product-box" style="padding-top: 2px; padding-left: 2px; padding-right: 2px; padding-left: 2px;">
+                    <div class="ibox-content product-box" style="padding-top: 2px; padding-left: 2px; padding-right: 2px; padding-left: 2px;" data-product-id="@product.allItems.Id">
                     <div class="product-imitation" style="padding-top: 0px; padding-bottom: 0px;">
                         <a href="/product/detail/@product.allItems.Id" class="text-decoration-none">
                             <img src="@product.allItems.IconUrl" alt="@product.allItems.Name" style="width: 100%; height: auto;">
@@ -37,7 +37,7 @@
                             @* <small class="text-muted">Category</small> *@
                             @* <a href="#" class="product-name"> Product</a> *@
 
-                            <div class="small m-t-xs">
+                            <div class="product-name small m-t-xs">
                                 @product.allItems.Name
                             </div>
                             <div class="m-t text-righ">
