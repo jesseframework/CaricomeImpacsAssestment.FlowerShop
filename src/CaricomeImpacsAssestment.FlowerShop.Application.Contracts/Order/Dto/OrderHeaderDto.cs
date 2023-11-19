@@ -18,6 +18,6 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Dto
         public double TotalDue { get; set; }
         public double Shipping { get; set; }
         public double TotalDiscount { get; set; }
-        public string CouponCode { get; set; }
+        public string? CouponCode { get; set; }
     }
 }

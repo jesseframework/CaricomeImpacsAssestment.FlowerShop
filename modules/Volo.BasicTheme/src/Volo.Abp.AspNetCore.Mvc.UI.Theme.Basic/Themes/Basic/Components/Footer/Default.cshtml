@@ -1,4 +1,14 @@
-﻿<footer class="text-center text-lg-start text-dark"
+﻿@using Volo.Abp.Ui.Branding;
+@inject IBrandingProvider BrandingProvider
+
+@section styles {
+    <abp-style src="/Default.css" />
+}
+
+@section scripts {
+}
+
+<footer class="text-center text-lg-start text-dark"
         style="background-color: #ECEFF1">    
     <section class="d-flex justify-content-between p-4 text-white"
              style="background-color: black">
@@ -60,13 +70,13 @@
                         <a href="/shop?categoryName=Celebrate+with+Joyful+Blooms!" class="text-dark">Birthday</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-dark">Valentine's Day</a>
+                        <a href="/shop?categoryName=Romance+Blossoms+in+Petals" class="text-dark">Valentine's Day</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-dark">Bereavement</a>
+                        <a href="/shop?categoryName=Comfort+in+Times+of+Sorrow" class="text-dark">Bereavement</a>
                     </p>
                     <p>
-                        <a href="#!" class="text-dark">Widdengs</a>
+                        <a href="/shop?categoryName=Elegant+Flowers+for+Your+Day" class="text-dark">Widdengs</a>
                     </p>
                 </div>
                 <!-- Grid column -->

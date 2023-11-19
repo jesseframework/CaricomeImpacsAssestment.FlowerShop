@@ -1,5 +1,6 @@
 ﻿using CaricomeImpacsAssestment.FlowerShop.Customer.Dto;
 using System;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
@@ -19,6 +20,11 @@ namespace CaricomeImpacsAssestment.FlowerShop.Customer
             IRepository<Country, Guid> countryRepository) : base(countryRepository)
         {
             _countryRepository = countryRepository;
+        }
+       
+        public override Task<PagedResultDto<CountryDto>> GetListAsync(PagedAndSortedResultRequestDto input)
+        {
+            return base.GetListAsync(input);
         }
     }
 }

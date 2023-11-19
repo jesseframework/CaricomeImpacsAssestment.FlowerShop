@@ -101,6 +101,9 @@ public class FlowerShopWebModule : AbpModule
         services.AddTransient<IOrderHeaderAppService, CompleteAndCheckOutAppService>();
         services.AddTransient<ICookieTrackerAppService, CookieAppService>();
         services.AddTransient<ICustomerAccountAppService, CustomerAccountAppService>();
+        services.AddTransient<ICountryAppService, CountryAppService>();
+        services.AddTransient<ICurrencyAppService, CurrencyAppService>();
+        
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)

@@ -307,14 +307,23 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             var orderHeaderData = await _orderHeaderRepository.GetListAsync(p => p.CookieTrackerId == cookieId
                                                                             && p.Status.Equals("Draft"));
             var orderHeaderQuery = (from header in orderHeaderData
-                                    group header by header.CookieTrackerId into g
+                                    group header by new 
+                                    {
+                                        header.CookieTrackerId,
+                                        header.CouponCode
+                                        
+
+                                    }  into g
                                   select new OrderHeaderDto
                                   {
+                                      CouponCode = g.Key.CouponCode,
                                       SubTotal = g.Sum(x => x.SubTotal),
                                       TotalDue = g.Sum(x => x.TotalDue),
                                       Shipping = g.Sum(x => x.Shipping),
                                       TaxAmount = g.Sum(x => x.TaxAmount),
                                       TotalDiscount = g.Sum(x => x.TotalDiscount),
+                                      
+                                      
                                   }).FirstOrDefault();
 
             return orderHeaderQuery;

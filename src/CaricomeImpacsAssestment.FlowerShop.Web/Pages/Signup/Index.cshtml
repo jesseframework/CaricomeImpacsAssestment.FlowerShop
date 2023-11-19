@@ -12,7 +12,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
    
 }
-@section scripts {
+@section scripts {    
     <abp-script src="/Pages/Signup/Index.js" />
     <abp-script type="typeof(SignalRBrowserScriptContributor)" />
 
@@ -24,7 +24,8 @@
 
             <div class="card">
                 <div class="card-body">
-                    <ol class="activity-checkout mb-0 px-4 mt-3">
+                     <form id="registrationForm">
+                        <ol class="activity-checkout mb-0 px-4 mt-3">
                         <li class="checkout-item">
                             <div class="avatar checkout-icon p-1">
                                 <div class="avatar-title rounded-circle bg-primary">
@@ -36,50 +37,59 @@
                                     <h5 class="font-size-16 mb-1">Login Info</h5>
                                     <p class="text-muted text-truncate mb-4">Enter your login information to create account</p>
                                     <div class="mb-3">
-                                        <form>
-                                            <div>
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="billing-name">Name</label>
-                                                            <input type="text" class="form-control" id="billing-name" placeholder="Enter name">
-                                                        </div>
+
+                                        <div>
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" id="abp-address-type" for="abp-address-type" hidden="hidden">Billing</label>
+                                                        <label class="form-label" for="billing-name">Full Name<span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="fullName" placeholder="Enter fullname with 1 space" required>
+                                                        <span class="error text-danger"></span>
                                                     </div>
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="billing-email-address">Email Address</label>
-                                                            <input type="email" class="form-control" id="billing-email-address" placeholder="Enter email">
-                                                        </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="mb-3">                                                                                                                     
+                                                        <label class="form-label" for="billing-name">User Name <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="userName" placeholder="Enter name" required>
+                                                        <span class="error text-danger"></span>
                                                     </div>
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="billing-phone">Phone</label>
-                                                            <input type="text" class="form-control" id="billing-phone" placeholder="Enter Phone no.">
-                                                        </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="billing-email-address">Email Address<span class="text-danger">*</span></label>
+                                                        <input type="email" class="form-control" id="emailAddress" placeholder="Enter email" required>
+                                                        <span class="error text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                   
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="billing-phone">Phone<span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" id="phone" placeholder="Enter Phone no." required>
+                                                        <span class="error text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="mb-4 mb-lg-0">
+                                                        <label class="form-label" for="password">Password<span class="text-danger">*</span></label>
+                                                        <input type="password" class="form-control" id="password" placeholder="Enter Password" required>
+                                                        <span class="error text-danger"></span>
                                                     </div>
                                                 </div>
 
-                                               
-
-                                                <div class="row">
-                                                    
-
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-4 mb-lg-0">
-                                                            <label class="form-label" for="password">Password</label>
-                                                            <input type="text" class="form-control" id="password" placeholder="Enter Password">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-0">
-                                                            <label class="form-label" for="password">Confirm Password</label>
-                                                            <input type="text" class="form-control" id="confirmpassword" placeholder="Enter Confirm Password">
-                                                        </div>
+                                                <div class="col-lg-4">
+                                                    <div class="mb-0">
+                                                        <label class="form-label" for="confirmpassword">Confirm Password<span class="text-danger">*</span></label>
+                                                        <input type="password" class="form-control" id="confirmpassword" placeholder="Enter Confirm Password" required>
+                                                        <span class="error text-danger"></span>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -95,72 +105,89 @@
                                     <h5 class="font-size-16 mb-1">Billing Info</h5>
                                     <p class="text-muted text-truncate mb-4">Enter your billing address</p>
                                     <div class="mb-3">
-                                        <form>
-                                            <div>
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="billing-name">Name</label>
-                                                            <input type="text" class="form-control" id="billing-name" placeholder="Enter name">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="billing-email-address">Email Address</label>
-                                                            <input type="email" class="form-control" id="billing-email-address" placeholder="Enter email">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="billing-phone">Phone</label>
-                                                            <input type="text" class="form-control" id="billing-phone" placeholder="Enter Phone no.">
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        
+                                        <div>
+                                            <div class="mb-3">
+                                                    <label class="form-label" for="billingStreet">Address<span class="text-danger">*</span></label>
+                                                    <textarea class="form-control" id="billingStreet" rows="3" placeholder="Enter full address"></textarea>
+                                                <span class="error text-danger"></span>
+                                            </div>
 
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="billing-address">Address</label>
-                                                    <textarea class="form-control" id="billing-address" rows="3" placeholder="Enter full address"></textarea>
-                                                </div>
-
-                                                <div class="row">
+                                            <div class="row">
                                                     <div class="col-lg-4">
                                                         <div class="mb-4 mb-lg-0">
-                                                            <label class="form-label">Country</label>
-                                                            <select class="form-control form-select" title="Country">
+                                                            <label class="form-label" for="billingCity">City <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="billingCity" placeholder="Enter City">
+                                                            <span class="error text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+                                                <div class="col-lg-4">
+                                                    <div class="mb-4 mb-lg-0">
+                                                            <label class="form-label" for="billingState">State <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="billingState" placeholder="Enter State">
+                                                        <span class="error text-danger"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-4">
+                                                    <div class="mb-0">
+                                                            <label class="form-label" for="billingPostalCode">Zip / Postal code <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="billingPostalCode" placeholder="Enter Postal code">
+                                                        <span class="error text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="mb-4 mb-lg-0">
+                                                            <label class="form-label">Country <span class="text-danger">*</span></label>
+                                                            <select class="form-control form-select" title="Country" id="billingCountryId">
                                                                 <option value="0">Select Country</option>
-                                                                <option value="AF">Afghanistan</option>
-                                                                <option value="AL">Albania</option>
-                                                                <option value="DZ">Algeria</option>
-                                                                <option value="AS">American Samoa</option>
-                                                                <option value="AD">Andorra</option>
-                                                                <option value="AO">Angola</option>
-                                                                <option value="AI">Anguilla</option>
+                                                                @foreach (var country in @Model.countryList.Items)
+                                                                {
+                                                                    <option value="@country.Id">@country.Name</option>
+                                                                }
                                                             </select>
                                                         </div>
+                                                        <span class="error text-danger"></span>
                                                     </div>
-
                                                     <div class="col-lg-4">
                                                         <div class="mb-4 mb-lg-0">
-                                                            <label class="form-label" for="billing-city">City</label>
-                                                            <input type="text" class="form-control" id="billing-city" placeholder="Enter City">
+                                                            <label class="form-label">Currency <span class="text-danger">*</span></label>
+                                                            <select class="form-control form-select" title="Currency" id="currencyId">
+                                                                <option value="0">Select Currency</option>
+                                                                @foreach (var currency in @Model.currencyList.Items)
+                                                                {
+                                                                    <option value="@currency.Id">@currency.CurrencyName</option>
+                                                                }
+                                                            </select>
                                                         </div>
+                                                        <span class="error text-danger"></span>
                                                     </div>
-
-                                                    <div class="col-lg-4">
-                                                        <div class="mb-0">
-                                                            <label class="form-label" for="zip-code">Zip / Postal code</label>
-                                                            <input type="text" class="form-control" id="zip-code" placeholder="Enter Postal code">
-                                                        </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Is your shipping address different?</label>
+                                                <div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="addressType" id="sameAddress" value="same" checked>
+                                                        <label class="form-check-label" for="sameAddress">
+                                                            No, it's the same
+                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="addressType" id="differentAddress" value="shipping">
+                                                        <label class="form-check-label" for="differentAddress">
+                                                            Yes, it's different
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
                         </li>
-                        <li class="checkout-item">
+                        <li class="checkout-item" id="shippingInfo" style="display: none;">
                             <div class="avatar checkout-icon p-1">
                                 <div class="avatar-title rounded-circle bg-primary">
                                     <i class="bx bxs-truck text-white font-size-20"></i>
@@ -173,73 +200,77 @@
                                     <div class="mb-3">
                                         
                                         <div class="mb-3">
-                                            <form>
-                                                <div>
-                                                    <div class="row">
-                                                        <div class="col-lg-4">
-                                                            <div class="mb-3">
-                                                                <label class="form-label" for="billing-name">Name</label>
-                                                                <input type="text" class="form-control" id="billing-name" placeholder="Enter name">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4">
-                                                            <div class="mb-3">
-                                                                <label class="form-label" for="billing-email-address">Email Address</label>
-                                                                <input type="email" class="form-control" id="billing-email-address" placeholder="Enter email">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-4">
-                                                            <div class="mb-3">
-                                                                <label class="form-label" for="billing-phone">Phone</label>
-                                                                <input type="text" class="form-control" id="billing-phone" placeholder="Enter Phone no.">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
+                                           
+                                            <div>
+                                                 
+                                                
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="billing-address">Address</label>
-                                                        <textarea class="form-control" id="billing-address" rows="3" placeholder="Enter full address"></textarea>
+                                                        <label class="form-label" for="shippingStreet">Address<span class="text-danger">*</span></label>
+                                                        <textarea class="form-control" id="shippingStreet" rows="3" placeholder="Enter full address"></textarea>
+                                                        <span class="error text-danger"></span>
                                                     </div>
 
                                                     <div class="row">
                                                         <div class="col-lg-4">
                                                             <div class="mb-4 mb-lg-0">
-                                                                <label class="form-label">Country</label>
-                                                                <select class="form-control form-select" title="Country">
-                                                                    <option value="0">Select Country</option>
-                                                                    <option value="AF">Afghanistan</option>
-                                                                    <option value="AL">Albania</option>
-                                                                    <option value="DZ">Algeria</option>
-                                                                    <option value="AS">American Samoa</option>
-                                                                    <option value="AD">Andorra</option>
-                                                                    <option value="AO">Angola</option>
-                                                                    <option value="AI">Anguilla</option>
-                                                                </select>
+                                                                <label class="form-label" for="shippingCity">City <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" id="shippingCity" placeholder="Enter City">
+                                                                <span class="error text-danger"></span>
                                                             </div>
                                                         </div>
 
                                                         <div class="col-lg-4">
                                                             <div class="mb-4 mb-lg-0">
-                                                                <label class="form-label" for="billing-city">City</label>
-                                                                <input type="text" class="form-control" id="billing-city" placeholder="Enter City">
+                                                                <label class="form-label" for="shippingState">State <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" id="shippingState" placeholder="Enter State">
+                                                                <span class="error text-danger"></span>
                                                             </div>
                                                         </div>
 
                                                         <div class="col-lg-4">
                                                             <div class="mb-0">
-                                                                <label class="form-label" for="zip-code">Zip / Postal code</label>
-                                                                <input type="text" class="form-control" id="zip-code" placeholder="Enter Postal code">
+                                                                <label class="form-label" for="shippingPostalCode">Zip / Postal code <span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" id="shippingPostalCode" placeholder="Enter Postal code">
+                                                                <span class="error text-danger"></span>
                                                             </div>
                                                         </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-4 mb-lg-0">
+                                                                <label class="form-label">Country <span class="text-danger">*</span></label>
+                                                                <select class="form-control form-select" title="Country" id="shippingCountryId">
+                                                                    <option value="0">Select Country</option>
+                                                                    @foreach (var country in @Model.countryList.Items)
+                                                                    {
+                                                                        <option value="@country.Id">@country.Name</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <span class="error text-danger"></span>
+                                                        </div>
+                                                        <div class="col-lg-4">
+                                                            <div class="mb-4 mb-lg-0">
+                                                                <label class="form-label">Currency <span class="text-danger">*</span></label>
+                                                                <select class="form-control form-select" title="Currency" id="currencyId">
+                                                                    <option value="0">Select Currency</option>
+                                                                    @foreach (var currency in @Model.currencyList.Items)
+                                                                    {
+                                                                        <option value="@currency.Id">@currency.CurrencyName</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <span class="error text-danger"></span>
+                                                        </div>
+                                                        
                                                     </div>
-                                                </div>
-                                            </form>
+                                            </div>
+                                           
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </li>
                     </ol>
+                    </form>
                 </div>
             </div>
 
@@ -251,8 +282,8 @@
                 </div> <!-- end col -->
                 <div class="col">
                     <div class="text-end mt-2 mt-sm-0">
-                        <a href="#" class="btn btn-success">
-                            <i class="mdi mdi-cart-outline me-1"></i> Procced
+                        <a href="#" class="btn btn-success" id="registerUserBtn">
+                            <i class="mdi mdi-cart-outline me-1"></i> Proceed
                         </a>
                     </div>
                 </div> <!-- end col -->
@@ -265,49 +296,55 @@
                     <div class="p-3 bg-light mb-3">
                         <h5 class="font-size-16 mb-0">
                             Order Summary
-                            <span class="float-end ms-2">#MN0124</span>
+                            <span class="float-end ms-2">#@Model.checkTotal.OrderNo</span>
                         </h5>
                     </div>
 
-
-                    <!-- Product Row -->
-                    <div class="d-flex mb-2">
-                        <div class="product-image" style="width: 110px;">
-                            <img src="https://www.bootdey.com/image/280x280/FF00FF/000000" alt="product-img" title="product-img" class="avatar-lg rounded">
+                    @foreach (var product in @Model.checkOutList)
+                    {
+                        <!-- Product Row -->
+                        <div class="d-flex mb-2">
+                            <div class="product-image" style="width: 110px;">
+                                
+                                <img src="@product.IconUrl" alt="@product.ItemName" alt="product-img" title="product-img" class="avatar-lg rounded">
+                            </div>
+                            <div class="product-desc flex-grow-1 ms-2">
+                                <h7 class="font-size-12 text-truncate">
+                                    <a href="#" class="text-dark">@product.ItemName </a>
+                                </h7>
+                                
+                                <p class="text-muted mb-0 mt-1">$@product.UnitPrice x @product.Quantity</p>
+                            </div>
+                            <div class="product-price">
+                                $@product.LineTotal
+                            </div>
                         </div>
-                        <div class="product-desc flex-grow-1 ms-2">
-                            <h5 class="font-size-16 text-truncate">
-                                <a href="#" class="text-dark">Waterproof Mobile Phone</a>
-                            </h5>
-                            <p class="text-muted mb-0">
-                                <i class="bx bxs-star text-warning"></i>
-                                <i class="bx bxs-star text-warning"></i>
-                                <i class="bx bxs-star text-warning"></i>
-                                <i class="bx bxs-star text-warning"></i>
-                                <i class="bx bxs-star-half text-warning"></i>
-                            </p>
-                            <p class="text-muted mb-0 mt-1">$ 260 x 2</p>
-                        </div>
-                        <div class="product-price">
-                            $ 520
-                        </div>
-                    </div>
+                    }
+                    
                     <hr />
                     <div class="d-flex justify-content-between mb-1 small">
-                        <span>Subtotal</span> <span>$677</span>
+                        <span>Subtotal</span> <span> $@Model.checkTotal.SubTotal.ToString("0.00")</span>
                     </div>
                     <div class="d-flex justify-content-between mb-1 small">
-                        <span>Tax</span> <span>$655</span>
+                        <span>Tax</span> <span>$@Model.checkTotal.TaxAmount.ToString("0.00")</span>
                     </div>
                     <div class="d-flex justify-content-between mb-1 small">
-                        <span>Shipping</span> <span>$677</span>
+                        <span>Shipping</span> <span>$@Model.checkTotal.Shipping.ToString("0.00")</span>
                     </div>
+
                     <div class="d-flex justify-content-between mb-1 small">
-                        <span>Coupon (Code: NEWYEAR)</span> <span class="text-danger">-$7788</span>
+                        <span>Discount</span> <span class="text-danger">-$@Model.checkTotal.LineDiscount.ToString("0.00")</span>
                     </div>
+
+                    <div class="d-flex justify-content-between mb-1 small">
+                        <span>Coupon Code:<input type="text" class="form-control d-flex justify-content-between mb-1 small " id="coupon-code" placeholder="Coupon Code"></span>
+                        
+                    </div>
+                    <button class="btn btn-primary btn-rounded" id="addToCartBtn">Update</button>
+                    
                     <hr>
                     <div class="d-flex justify-content-between mb-4 small">
-                        <span>TOTAL</span> <strong class="text-dark">7766</strong>
+                        <span>TOTAL</span> <strong class="text-dark">$@Model.checkTotal.LineTotal.ToString("0.00")</strong>
                     </div>
                     
                     

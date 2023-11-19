@@ -45,39 +45,7 @@ body {
     position: relative;
 }
 
-.ecommerce .tag-list {
-    padding: 0;
-}
 
-.ecommerce .fa-star {
-    color: #d1dade;
-}
-
-    .ecommerce .fa-star.active {
-        color: #f8ac59;
-    }
-
-.ecommerce .note-editor {
-    border: 1px solid #e7eaec;
-}
-
-table.shoping-cart-table {
-    margin-bottom: 0;
-}
-
-    table.shoping-cart-table tr td {
-        border: none;
-        text-align: right;
-    }
-
-        table.shoping-cart-table tr td.desc,
-        table.shoping-cart-table tr td:first-child {
-            text-align: left;
-        }
-
-        table.shoping-cart-table tr td:last-child {
-            width: 80px;
-        }
 
 .product-name {
     font-size: 16px;
@@ -92,16 +60,7 @@ table.shoping-cart-table {
         color: #1ab394;
     }
 
-.product-price {
-    font-size: 14px;
-    font-weight: 600;
-    color: #ffffff;
-    background-color: #1ab394;
-    padding: 6px 12px;
-    position: absolute;
-    top: -32px;
-    right: 0;
-}
+
 
 .product-detail .ibox-content {
     padding: 30px 30px 50px 30px;

@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var baseUrl = `${window.location.protocol}//${window.location.host}`;
-
+    debugger
     $('#addToCartBtn').click(function (e) {
         e.preventDefault();
         var itemId = $(this).data('itemid');
@@ -60,11 +60,15 @@ $(document).ready(function () {
         $('#totalCostBadge').text('$' + lineTotal.toFixed(2));
     }
 
-    (function () {
+    //(function () {
 
-        $("#cart").on("click", function () {
-            $(".shopping-cart").fadeToggle("fast");
-        });
+    //    $("#cart").on("click", function () {
+    //        $(".shopping-cart").fadeToggle("fast");
+    //    });
 
-    })();
+    //})();
+
+    //$('#viewCart').click(function () {
+    //    window.location.href = '/cart/';
+    //});
 });

@@ -172,6 +172,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                                   select new OrderDetailTempDto
                                   {                                     
                                       LineTotal = g.Sum(x => x.LineTotal),
+                                      Shipping = g.Sum(x => x.Shipping),
                                       Quantity = g.Count()
                                   }).FirstOrDefault();
 
@@ -219,8 +220,11 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                                       IconUrl = g.Key.IconUrl,
                                       UnitPrice = g.Sum(x=>x.ListPrice),
                                       LineTotal = g.Sum(x => x.LineTotal),
-                                      Quantity = g.Sum(x => x.Quantity)
-                                      
+                                      Quantity = g.Sum(x => x.Quantity),
+                                      SubTotal = g.Sum(x=>x.SubTotal),
+                                      Shipment = g.Sum(x => x.Shipping),
+                                      TaxAmount = g.Sum(x => x.TaxAmount),
+
                                   }).ToList();
 
             return orderTempQuery;
