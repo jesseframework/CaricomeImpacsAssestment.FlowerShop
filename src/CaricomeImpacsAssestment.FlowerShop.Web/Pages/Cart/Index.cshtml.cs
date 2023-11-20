@@ -24,12 +24,18 @@ namespace CaricomeImpacsAssestment.FlowerShop.Web.Pages.Cart
         [BindProperty(SupportsGet = true)]
         public OrderDetailTempDto checkTotal { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             var cartCookieValue = GetCookieValue("Browser_Cart_Session");
             var cookieUUID = await _cookieTrackerAppService.GetByCookieUUID(cartCookieValue);
             checkOutList = await _orderDetailTempAppService.GetShoppingCartForCheckOut(cookieUUID);
             checkTotal = await _orderDetailTempAppService.GetShoppingCartAmountByCookieId(cookieUUID);
+            if (checkOutList == null)
+            {
+
+                return RedirectToPage("/Shop");
+            }
+            return Page();
         }
 
         private string GetCookieValue(string cookieName)

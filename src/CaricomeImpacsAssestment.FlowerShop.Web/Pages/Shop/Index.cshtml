@@ -12,9 +12,12 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 }
 @section scripts {
+    <abp-script src="/js/flowership.js" />
     <abp-script src="/Pages/Shop/Index.js" />
     <abp-script type="typeof(SignalRBrowserScriptContributor)" />
-
+    <script>
+        var ck = '@Model.Ck';
+    </script>
 }
 <div class="container">
     
@@ -42,7 +45,13 @@
                             </div>
                             <div class="m-t text-righ">
                                 <hr />
-                            <a href="#" class="btn btn-xs btn-outline btn-primary">Add To Cart <i class="fa fa-cart-plus" ></i> </a>
+                                <input type="number" id="quantityInput" value="1" min="1" hidden="hidden" />
+                                <button class="btn btn-primary btn-rounded addToCartBtn" id="addcrti_@product.allItems.Id" data-itemid="@product.allItems.Id">Add To Cart</button>
+                                <a href="/cart" class="btn btn-dark btn-rounded mr-1" data-toggle="tooltip" title="View Cart" data-original-title="View Cart"
+                                   id="viewCart">
+                                    <i class="fa fa-shopping-cart"></i>
+
+                                </a>
                             </div>
                         </div>
                     </div>

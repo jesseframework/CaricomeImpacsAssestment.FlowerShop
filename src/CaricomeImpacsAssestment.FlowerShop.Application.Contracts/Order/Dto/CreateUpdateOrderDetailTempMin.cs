@@ -6,7 +6,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Dto
 {
     public class CreateUpdateOrderDetailTempMin
     {
-        public string OrderNo { get; set; }       
+        public string? OrderNo { get; set; }       
         public Guid ItemId { get; set; }        
         public double Quantity { get; set; }
         

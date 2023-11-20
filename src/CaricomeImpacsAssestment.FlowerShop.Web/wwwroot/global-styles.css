@@ -4,7 +4,7 @@
     --lpx-logo: url('/images/logo/leptonx/logo-light.png');
     --lpx-logo-icon: url('/images/logo/leptonx/logo-light-thumbnail.png');
 }
-.wrapper {
+/*.wrapper {
     min-height: 100vh;
     height: auto;
-}
+}*/

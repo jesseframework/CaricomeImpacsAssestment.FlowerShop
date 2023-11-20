@@ -56,10 +56,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Images\" />
-    <Folder Include="Pages\Product\Detail\Images\" />
     <Folder Include="wwwroot\images\logo\" />
     <Folder Include="wwwroot\images\appimages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\Cart\Index.cshtml" />
+    <None Include="Pages\CheckOut\Index.cshtml" />
+    <None Include="Pages\Order\Index.cshtml" />
+    <None Include="Pages\Product\Detail\Index.cshtml" />
+    <None Include="Pages\Shop\Index.cshtml" />
+    <None Include="Pages\Signup\Index.cshtml" />
   </ItemGroup>
 
 </Project>

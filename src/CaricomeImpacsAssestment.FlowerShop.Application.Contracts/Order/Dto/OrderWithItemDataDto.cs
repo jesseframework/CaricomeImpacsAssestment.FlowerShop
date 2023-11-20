@@ -9,6 +9,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Dto
     {
         public string ItemNo { get; set; }
         public Guid ItemId { get; set; }
+        public Guid DetailId { get; set; }
         public string ItemName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }

@@ -188,7 +188,7 @@ public class FlowerShopDbContext :
             b.HasOne<Address>().WithMany().HasForeignKey(x => x.BillToAddressId);
             b.HasOne<Address>().WithMany().HasForeignKey(x => x.ShipToAddressId);
             b.HasOne<CustomerAccount>().WithMany().HasForeignKey(x => x.CustomerAccountId);
-            b.HasIndex(x => x.OrderNo).IsUnique();
+            //b.HasIndex(x => x.OrderNo).IsUnique(); remove for not not enougt time to implement logice for order number
         });
         builder.Entity<OrderDetail>(b =>
         {

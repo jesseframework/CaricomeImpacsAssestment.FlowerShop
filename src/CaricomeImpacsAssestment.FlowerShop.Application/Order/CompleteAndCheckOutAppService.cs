@@ -6,6 +6,7 @@ using CaricomeImpacsAssestment.FlowerShop.Payment;
 using CaricomeImpacsAssestment.FlowerShop.Payment.Dto;
 using CaricomeImpacsAssestment.FlowerShop.Product;
 using Microsoft.AspNetCore.Http;
+using Nito.AsyncEx.Synchronous;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -162,7 +163,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             //ToDo If you have more time validate calculation
             var saveOrderHeader = new CreateUpdateOrderHeaderDto()
             {
-                OrderNo = "",
+                
                 CookieTrackerId = checkCookieId,
                 OrderDate = DateTime.Now,
                 CustomerAccountId = customerAccountData.account.Id,
@@ -180,7 +181,23 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             };
 
             var saveCartHeader = ObjectMapper.Map<CreateUpdateOrderHeaderDto, OrderHeader>(saveOrderHeader);
-            await _orderHeaderRepository.InsertAsync(saveCartHeader);
+            
+            var IsHeaderInDb = await _orderHeaderRepository.GetListAsync(p=>p.CookieTrackerId == checkCookieId);
+            if (!IsHeaderInDb.Any())
+            {
+                await _orderHeaderRepository.InsertAsync(saveCartHeader);
+            }
+            else
+            {
+                var InHeaderInDb = await _orderHeaderRepository.GetAsync(p => p.CookieTrackerId == checkCookieId);
+                if (InHeaderInDb != null)
+                {
+                    await _orderHeaderRepository.UpdateAsync(InHeaderInDb);
+                }
+               
+            }
+
+            
 
             foreach (var detail in orderDetailTemp)
             {
@@ -207,11 +224,43 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
 
                 };
 
-                orderdetailIst.Add(saveOrderDetail);
+               
+
+                //This is not good bu am out of time so here we go
+                var IsDetailInDb = await _orderDetailRepository.GetListAsync(p => p.CookieTrackerId == checkCookieId);
+                if (!IsDetailInDb.Any())
+                {
+                   
+                    orderdetailIst.Add(saveOrderDetail);
+                }
+                else
+                {
+
+
+                    foreach(var data in IsDetailInDb)
+                    {
+                        var updatenow = await _orderDetailRepository.GetAsync(data.Id);
+                        if(updatenow != null)
+                        {
+                            updatenow.Quantity = data.Quantity;
+                            updatenow.UnitPrice = data.UnitPrice;
+                            updatenow.ListPrice = data.ListPrice;
+                            updatenow.TaxAmount = data.TaxAmount;
+                            updatenow.LineDiscount = data.LineDiscount;
+                            updatenow.SubTotal = data.SubTotal;
+                            updatenow.LineTotal = data.LineTotal;
+                        }
+
+                        await _orderDetailRepository.UpdateAsync(data);
+                       
+                    }
+
+                }
 
             }
 
             var saveCartDetail = ObjectMapper.Map<List<CreateUpdateOrderDetailDto>, List<OrderDetail>>(orderdetailIst);
+
             await _orderDetailRepository.InsertManyAsync(saveCartDetail);
 
 

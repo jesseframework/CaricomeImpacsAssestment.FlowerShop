@@ -10,9 +10,12 @@ html, body {
     box-sizing: border-box;
 }
 
-#footer {
-    height: 150px; /* Your Footer's Height */
-    margin-top: -150px; /* Equal to the negative value of your footer's height */
-    position: relative;
+/*#footer {
+    height: 150px;*/ /* Your Footer's Height */
+    /*margin-top: -150px;*/ /* Equal to the negative value of your footer's height */
+    /*position: relative;
     clear: both;
+}*/
+#footer {
+    bottom: 0;
 }

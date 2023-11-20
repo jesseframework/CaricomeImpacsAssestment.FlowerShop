@@ -1,5 +1,6 @@
 using CaricomeImpacsAssestment.FlowerShop.Order;
 using CaricomeImpacsAssestment.FlowerShop.Order.Dto;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Threading.Tasks;
@@ -24,13 +25,22 @@ namespace CaricomeImpacsAssestment.FlowerShop.Web.Pages.CheckOut
 
         public async Task<IActionResult> OnGetAsync()
         {
+
+            if (!User.Identity.IsAuthenticated)
+            {
+
+                HttpContext.Response.Redirect("/Signup");
+                return new EmptyResult();
+            }
+
             var cartCookieValue = GetCookieValue("Browser_Cart_Session");
             var cookieUUID = await _cookieTrackerAppService.GetByCookieUUID(cartCookieValue);
             orderHeader = await _orderHeaderAppService.GetOrderConfimTotalByCookieId(cookieUUID);
             if (orderHeader == null)
             {
-                
-                return RedirectToPage("/Shop/Index"); 
+
+                return RedirectToPage("/Shop");
+
             }
 
             return Page();

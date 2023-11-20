@@ -78,9 +78,8 @@
                                                 </dl>
 
                                                 <div class="m-t-sm">
-                                                    <a href="#" class="text-muted"><i class="fa fa-gift"></i> Add gift package</a>
-                                                    |
-                                                    <a href="#" class="text-muted"><i class="fa fa-trash"></i> Remove item</a>
+
+                                                    <a href="#" id="removeItem_@product.DetailId" class="text-muted itemRemove"><i class="fa fa-trash"></i> Remove item</a>
                                                 </div>
                                             </td>
 
@@ -89,7 +88,9 @@
                                                 <s class="small text-muted">$@ActualUnitPrice.ToString("0.00")</s>
                                             </td>
                                             <td width="100">
-                                                <input type="text" class="form-control" value="@Convert.ToInt32(product.Quantity)">
+                                                <input type="text" id="@("quantity_" + product.DetailId)" class="form-control" value="@Convert.ToInt32(product.Quantity)">
+                                                <button class="btn btn-outline-primary mt-2 btn-rounded update-cart" id="@("update_" + product.DetailId)">Update</button>
+
                                             </td>
                                             <td>
                                                 <h4>
@@ -104,7 +105,7 @@
 
                     }
                     <div class="ibox-content">
-                        <a href="/checkout" class="btn btn-primary pull-right"><i class="fa fa fa-shopping-cart"></i> Checkout</a>
+                        <button id="cart-checkout" class="btn btn-primary pull-right"><i class="fa fa fa-shopping-cart"></i> Checkout</button>
 
                         <a href="/shop" id="continueshopping"  class="btn btn-white"><i class="fa fa-arrow-left"></i> Continue shopping</a>
 
@@ -140,13 +141,14 @@
 
                 <div class="ibox">
                     <div class="ibox-title">
-                        <h5>Support</h5>
+                        <h5>Coupon</h5>
                     </div>
                     <div class="ibox-content text-center">
-                        <h3><i class="fa fa-phone"></i> +43 100 783 001</h3>
-                        <span class="small">
-                            Please contact with us if you have any questions. We are avalible 24h.
-                        </span>
+                       
+                        <div class="d-flex justify-content-between mb-1 small">
+                            <input type="text" class="form-control d-flex justify-content-between me-3" id="coupon-code" placeholder="Coupon Code">
+                            <button class="btn btn-primary btn-rounded" id="addToCartBtn">Apply</button>
+                        </div>
                     </div>
                 </div>
 

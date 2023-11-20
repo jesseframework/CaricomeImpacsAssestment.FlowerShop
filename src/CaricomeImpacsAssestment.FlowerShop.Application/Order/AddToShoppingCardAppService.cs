@@ -2,6 +2,7 @@
 using CaricomeImpacsAssestment.FlowerShop.Customer;
 using CaricomeImpacsAssestment.FlowerShop.Order.Dto;
 using CaricomeImpacsAssestment.FlowerShop.Order.Manager;
+using CaricomeImpacsAssestment.FlowerShop.Payment;
 using CaricomeImpacsAssestment.FlowerShop.Product;
 using CaricomeImpacsAssestment.FlowerShop.Product.Dto;
 using Microsoft.AspNetCore.Http;
@@ -30,6 +31,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         private readonly IRepository<OrderDetailTemp, Guid> _orderdetailTeamRepository;       
         private readonly IItemAppService _itemAppService;        
         private readonly CookieService _cookieService;
+        private readonly IRepository<Coupon, Guid> _couponRepository;
         private readonly UserCookieManager _userCookieManager;        
         private readonly BrowserInfomation _browserInfomation;
         private readonly IRepository<Category, Guid> _categoryRepository;
@@ -38,6 +40,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         private readonly IRepository<Item, Guid> _itemRepository;
         public AddToShoppingCardAppService(
              IRepository<Category, Guid> categoryRepository,
+             IRepository<Coupon, Guid> couponRepository,
             IRepository<ProductGroup, Guid> productgroupRepository,
             IRepository<ItemPrice, Guid> itempricesRepository,
             IRepository<Item, Guid> itemRepository,
@@ -56,6 +59,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             _productgroupRepository = productgroupRepository;
             _itempricesRepository = itempricesRepository;
             _itemRepository = itemRepository;
+            _couponRepository = couponRepository;
         }
         public async Task<ResponseStatusCodesDto> CreateShoppingCart(CreateUpdateOrderDetailTempMin input)
         {
@@ -80,6 +84,12 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                 //Not enought time to implement tax so am going just used a percentage
                 //Not enought time to implement LineDiscount so am going just used 0
                 //Not enought time to implement ListPrice and UnitPrice will be the same for now so
+                double _quantity = 0;
+                if (input.Quantity == 0)
+                {
+                    _quantity = 1;
+                }
+
                 var temCart = new CreateUpdateOrderDetailTempDto()
                 {
                     ItemId = input.ItemId,
@@ -92,15 +102,15 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                     ProductGroupId = itemAllData.productGroup.Id,
                     Decription = itemAllData.allItems.Description,
                     ExchangeRate = 1,
-                    Quantity = input.Quantity,
+                    Quantity = _quantity,
                     UnitPrice = itemAllData.price.SellCost,
                     ListPrice = itemAllData.price.SellCost,
                     TaxAmount = 0.15 * itemAllData.price.SellCost,
-                    Shipping = itemAllData.price.ShippingCost,
+                    Shipping = itemAllData.price.ShippingCost,                    
                     LineDiscount = 0,
-                    SubTotal = itemAllData.price.SellCost * input.Quantity,
+                    SubTotal = itemAllData.price.SellCost * _quantity,
                     LineTotal = (0.15 * itemAllData.price.SellCost) 
-                    + (itemAllData.price.SellCost * input.Quantity) + itemAllData.price.ShippingCost
+                    + (itemAllData.price.SellCost * _quantity) + itemAllData.price.ShippingCost
 
                 };
 
@@ -123,6 +133,53 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                 };
             }
             
+        }
+        public async Task UpdateShoppingCart(Guid detailId, double quantity, string? CoupanCode)
+        {
+
+            double _couponAmount = 0;
+            int _couponUsageLimit = 0;
+
+            var _couponData = await _couponRepository.GetListAsync(p =>
+                                                     p.Code.Equals(CoupanCode)
+                                                     && p.IsValidFrom <= DateTime.Now
+                                                     && p.IsValidToDate >= DateTime.Now
+                                                     && p.AmountUsed < p.UsageLimit);
+            if (!_couponData.Any())
+            {
+                _couponAmount = 0;
+                _couponUsageLimit = 0;
+            }
+            else
+            {
+                // ToDo index is not safe so will remove when i get time
+                if (_couponData[0].CouponType.Equals("Amount"))
+                {
+                    _couponAmount = _couponData[0].DiscountAmount;
+                }
+                else
+                {
+                    //ToDo will not implement for this demo
+                    _couponAmount = _couponData[0].DiscountAmount;
+                }
+
+                _couponUsageLimit = _couponData[0].UsageLimit;
+            }
+
+
+
+            var updateCartData = await _orderdetailTeamRepository.GetQueryableAsync();
+            var updateQuery = updateCartData.SingleOrDefault(p=>p.Id==detailId);
+            if (updateQuery != null)
+            {
+                updateQuery.Quantity = quantity;
+                updateQuery.LineDiscount = _couponAmount;
+                updateQuery.SubTotal = updateQuery.UnitPrice * quantity;
+                updateQuery.LineTotal = (0.15 * updateQuery.UnitPrice)
+                + (updateQuery.UnitPrice * quantity) + updateQuery.Shipping;
+
+                await _orderdetailTeamRepository.UpdateAsync(updateQuery);
+            }
         }
         public async Task<List<OrderDetailTempDto>> GetShoppingCartByCookieId(Guid cookieId)
         {
@@ -206,11 +263,13 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                                     qitems.LongDescription,
                                     qitems.ItemNo,
                                     qitems.IconUrl,
-                                    qitems.Id
+                                    qitems.Id,
+                                    detailId = detail.Id,
+                                    
                                     
                                   }  into g
                                   select new OrderWithItemDataDto
-                                  {
+                                  {   DetailId = g.Key.detailId,
                                       ItemId = g.Key.Id,
                                       ItemName = g.Key.itemName,
                                       ShortDescription = g.Key.Description,

@@ -140,74 +140,7 @@ $(document).ready(function () {
         
     }
     
-    //function saveAddress() {
-
-    //    return new Promise((resolve, reject) => {
-
-    //        var shippingStreet = $('#shippingStreet').val();
-    //        var shippingCity = $('#shippingCity').val();
-    //        var shippingState = $('#shippingState').val();
-    //        var shippingPostalCode = $('#shippingPostalCode').val();
-    //        var shippingCountryId = $('#shippingCountryId').val();
-
-    //        var billingStreet = $('#billingStreet').val();
-    //        var billingCity = $('#billingCity').val();
-    //        var billingState = $('#billingState').val();
-    //        var billingPostalCode = $('#billingPostalCode').val();
-    //        var billingCountryId = $('#billingCountryId').val();
-
-    //        if (sameAddressRadio.checked) {
-
-    //            shippingStreet = billingStreet;
-    //            shippingCity = billingCity;
-    //            shippingState = billingState;
-    //            shippingPostalCode = billingPostalCode;
-    //            shippingCountryId = billingCountryId;
-
-    //        }
-
-    //        abp.ajax({
-    //            url: baseUrl + '/api/app/address',
-    //            type: 'POST',
-    //            contentType: 'application/json',
-    //            data: JSON.stringify({
-    //                street: shippingStreet,
-    //                city: shippingCity,
-    //                state: shippingState,
-    //                postalCode: shippingPostalCode,
-    //                countryId: shippingCountryId,
-    //                addressTypeId: sdt
-    //            }),
-    //            success: function (shippingResponse) {
-    //                setShippingAddressId = shippingResponse.Id;
-    //                abp.ajax({
-    //                    url: baseUrl + '/api/app/address',
-    //                    type: 'POST',
-    //                    contentType: 'application/json',
-    //                    data: JSON.stringify({
-    //                        street: billingStreet,
-    //                        city: billingCity,
-    //                        state: billingState,
-    //                        postalCode: billingPostalCode,
-    //                        countryId: billingCountryId,
-    //                        addressTypeId: adt
-    //                    }),
-    //                    success: function (billingResponse) {
-    //                        setBillingAddressId = billingResponse.Id;
-    //                        resolve(response);
-
-    //                    },
-    //                    error: function (billingError) {
-    //                        abp.notify.error('An error occurred while saving account: ' + billingError.statusText);
-    //                    }
-    //                });
-    //            },
-    //            error: function (shippingError) {
-    //                abp.notify.error('An error occurred while saving shipping address: ' + shippingError.statusText);
-    //            }
-    //        });
-    //    });
-    //}
+    
 
     function saveShippingAddress() {
         return new Promise((resolve, reject) => {

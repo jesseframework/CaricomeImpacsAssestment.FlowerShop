@@ -7,10 +7,11 @@
 @inject IHtmlLocalizer<FlowerShopResource> L
 @inject ICurrentUser CurrentUser
 @section styles {
-    <abp-style src="/Pages/Product/Detail/Index.css" />
+    <abp-style src="/Pages/Product/Detail/Index.css"/>
 }
 @section scripts {
-    <abp-script src="/Pages/Product/Detail/Index.js" />
+    <abp-script src="/js/flowership.js"/>
+    <abp-script src="/Pages/Product/Detail/Index.js"/>
     <abp-script type="typeof(SignalRBrowserScriptContributor)" />
     <script>
         var ck = '@Model.Ck';        
