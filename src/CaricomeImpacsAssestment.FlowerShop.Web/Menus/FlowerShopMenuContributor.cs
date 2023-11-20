@@ -46,10 +46,35 @@ public class FlowerShopMenuContributor : IMenuContributor
         )
     );
 
+       
+
 
         if (MultiTenancyConsts.IsEnabled)
         {
             administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
+
+                        
+            //ToDo Remove and create admin olices
+            context.Menu.AddItem(
+               new ApplicationMenuItem(
+                   "Management",
+                   l["Management"],
+                   icon: "fa fa-system"
+               ).AddItem(
+                   new ApplicationMenuItem(
+                       "AddCustomer",
+                       l["Customer"],
+                       icon: "fas fa-user",
+                       url: "/Admin/Customer"
+                   )
+               ).AddItem(
+                   new ApplicationMenuItem(
+                       "AddItems",
+                       l["Items"],
+                       icon: "fas fa-stock",
+                       url: "/Items"
+                   )
+            ));
         }
         else
         {

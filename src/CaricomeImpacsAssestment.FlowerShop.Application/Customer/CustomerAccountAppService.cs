@@ -166,5 +166,46 @@ namespace CaricomeImpacsAssestment.FlowerShop.Customer
 
 
         }
+
+        public async Task<PagedResultDto<CustomerAllDto>> GetManagmentCustomer()
+        {
+            //Am aware that this section of my code could have db perfromance issue if am dealing with large data.
+            var _address = await _addressRepository.GetListAsync();
+            var _contact = await _contactRepository.GetListAsync();
+            var _account = await _customerRepository.GetListAsync();
+            var _addresstype = await _addressTypeRepository.GetListAsync();
+
+            var mapAddress = ObjectMapper.Map<List<Address>, List<AddressDto>>(_address);
+            var mapAddressType = ObjectMapper.Map<List<AddressType>, List<AddressTypeDto>>(_addresstype);
+            var mapContact = ObjectMapper.Map<List<Contact>, List<ContactDto>>(_contact);
+            var mapAccount = ObjectMapper.Map<List<CustomerAccount>, List<CustomerAccountDto>>(_account);
+
+            var queryResult = (from account in mapAccount
+                               join address in mapAddress on account.ShippingAddressId equals address.Id
+                               join contact in mapContact on account.ContactId equals contact.Id
+                               join addresstype in mapAddressType on address.AddressTypeId equals addresstype.Id
+                               where
+                               account.IsDeleted == false
+                               //&& account.UserId == CurrentUser.Id
+                               && addresstype.Type.Equals("ShipTo")
+                               select new CustomerAllDto
+                               {
+                                   account = account,
+                                   contact = contact,
+                                   addressType = addresstype,
+                                   address = address
+
+                               }).ToList();
+
+            
+
+            var totalCount = await Repository.GetCountAsync();
+
+            return new PagedResultDto<CustomerAllDto>(
+                totalCount,
+                queryResult
+            );
+
+        }
     }
 }

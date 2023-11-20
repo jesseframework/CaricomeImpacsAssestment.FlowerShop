@@ -1,0 +1,134 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using CaricomeImpacsAssestment.FlowerShop.Localization
+@using Volo.Abp.Users
+@model CaricomeImpacsAssestment.FlowerShop.Web.Pages.Dashboard.IndexModel;
+@inject IHtmlLocalizer<FlowerShopResource> L
+@inject ICurrentUser CurrentUser
+
+@{
+}
+
+<div><h2>Dashboard</h2></div>
+<p>
+<div class="container">
+	<div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
+		<div class="col">
+			<div class="card radius-10 border-start border-0 border-3 border-info">
+				<div class="card-body">
+					<div class="d-flex align-items-center">
+						<div>
+							<p class="mb-0 text-secondary">Total Orders</p>
+							<h4 class="my-1 text-info">4805</h4>
+							<p class="mb-0 font-13">+2.5% from last week</p>
+						</div>
+						<div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto">
+							<i class="fa fa-shopping-cart"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card radius-10 border-start border-0 border-3 border-danger">
+				<div class="card-body">
+					<div class="d-flex align-items-center">
+						<div>
+							<p class="mb-0 text-secondary">Total Revenue</p>
+							<h4 class="my-1 text-danger">$84,245</h4>
+							<p class="mb-0 font-13">+5.4% from last week</p>
+						</div>
+						<div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto">
+							<i class="fa fa-dollar"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card radius-10 border-start border-0 border-3 border-success">
+				<div class="card-body">
+					<div class="d-flex align-items-center">
+						<div>
+							<p class="mb-0 text-secondary">Bounce Rate</p>
+							<h4 class="my-1 text-success">34.6%</h4>
+							<p class="mb-0 font-13">-4.5% from last week</p>
+						</div>
+						<div class="widgets-icons-2 rounded-circle bg-gradient-ohhappiness text-white ms-auto">
+							<i class="fa fa-bar-chart"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card radius-10 border-start border-0 border-3 border-warning">
+				<div class="card-body">
+					<div class="d-flex align-items-center">
+						<div>
+							<p class="mb-0 text-secondary">Total Customers</p>
+							<h4 class="my-1 text-warning">8.4K</h4>
+							<p class="mb-0 font-13">+8.4% from last week</p>
+						</div>
+						<div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto">
+							<i class="fa fa-users"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</p>
+<p>
+<div><h2>Volumes by Categories</h2></div>
+<div data-v-6a145b43="" class="chart-view"><canvas id="BarChart" width="800" height="400" style="display: block; box-sizing: border-box; height: 400px; width: 800px;"></canvas></div>
+</p>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+	const labels = ["Irises", "Lilies", "Tulips", "Roses", "Orchids"];
+	const data = {
+		labels: labels,
+		datasets: [{
+			label: 'My First Dataset',
+			data: [65, 59, 80, 81, 56, 55, 40],
+			backgroundColor: [
+				'rgba(255, 99, 132, 0.2)',
+				'rgba(255, 159, 64, 0.2)',
+				'rgba(255, 205, 86, 0.2)',
+				'rgba(75, 192, 192, 0.2)',
+				'rgba(54, 162, 235, 0.2)',
+				'rgba(153, 102, 255, 0.2)',
+				'rgba(201, 203, 207, 0.2)'
+			],
+			borderColor: [
+				'rgb(255, 99, 132)',
+				'rgb(255, 159, 64)',
+				'rgb(255, 205, 86)',
+				'rgb(75, 192, 192)',
+				'rgb(54, 162, 235)',
+				'rgb(153, 102, 255)',
+				'rgb(201, 203, 207)'
+			],
+			borderWidth: 1
+		}]
+	};
+
+	const config = {
+		type: 'bar',
+		data: data,
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			}
+		},
+	};
+
+	const ctx = document.getElementById('BarChart');
+	new Chart(ctx, config);
+</script>
