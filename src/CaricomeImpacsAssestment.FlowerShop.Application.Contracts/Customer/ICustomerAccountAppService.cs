@@ -17,5 +17,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Customer
         Task<CustomerAllDto> GetCustomeWithReference();
         Task<CustomerAllDto> GetCustomeBillingAddressWithReference();
         Task<CustomerAllDto> GetCustomeShippingAddressWithReference();
+        Task<PagedResultDto<CustomerAllDto>> GetManagmentCustomer();
+        Task<CustomerAllDto> GetAllByIdCustomersWithReference(Guid Id);
     }
 }

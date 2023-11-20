@@ -18,4 +18,11 @@ html, body {
 }*/
 #footer {
     bottom: 0;
+    padding: 1rem; /* Padding for spacing */
+    /*border-top: 1px solid #e7e7e7;*/ /* Top border for a slight separation effect */
+}
+@media (min-width: 992px) { /* Large screen adjustments */
+    #footer {
+        text-align: left; /* Align text to the left on large screens */
+    }
 }
