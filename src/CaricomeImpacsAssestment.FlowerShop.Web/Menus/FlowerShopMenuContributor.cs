@@ -59,7 +59,7 @@ public class FlowerShopMenuContributor : IMenuContributor
                new ApplicationMenuItem(
                    "Management",
                    l["Management"],
-                   icon: "fa fa-system"
+                   icon: "fas fa-receipt"
                ).AddItem(
                    new ApplicationMenuItem(
                        "AddCustomer",
@@ -71,7 +71,7 @@ public class FlowerShopMenuContributor : IMenuContributor
                    new ApplicationMenuItem(
                        "AddItems",
                        l["Dashboard"],
-                       icon: "fas fa-stock",
+                       icon: "fas fa-chart-bar",
                        url: "/Admin/Dashboard"
                    )
             ).AddItem(
@@ -86,7 +86,7 @@ public class FlowerShopMenuContributor : IMenuContributor
                    new ApplicationMenuItem(
                        "AddItems",
                        l["Product Management"],
-                       icon: "fas fa-stock",
+                       icon: "fas fa-layer-group",
                        url: "/Items"
                    )
             ));

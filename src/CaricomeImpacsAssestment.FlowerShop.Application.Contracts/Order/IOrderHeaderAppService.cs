@@ -21,5 +21,6 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         Task<List<OrderWithItemDataDto>> GetOrderAllOrderSum();
         Task<OrderHeaderDto> GetOrderHeaderByOrderNo(string orderNo);
         Task<List<OrderWithItemDataDto>> GetOrderAllOrderWithItems(Guid Id);
+        Task UpdateOrderStatus(string orderStatus, Guid Id);
     }
 }

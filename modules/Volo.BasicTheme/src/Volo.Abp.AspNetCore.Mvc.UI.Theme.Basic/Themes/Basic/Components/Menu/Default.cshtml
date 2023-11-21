@@ -11,7 +11,7 @@
         if (menuItem.Url != null)
         {
             <li class="nav-item @cssClass @disabled" @elementId>
-                <a class="nav-link" href="@url" target="@menuItem.Target">
+                <a class="nav-link text-light" href="@url" target="@menuItem.Target">
                     @if (menuItem.Icon != null)
                     {
                         if (menuItem.Icon.StartsWith("fa"))
@@ -28,7 +28,7 @@
     {
         <li class="nav-item">
             <div class="dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="Menu_@(menuItem.Name)" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link text-light dropdown-toggle" href="#" id="Menu_@(menuItem.Name)" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     @if (menuItem.Icon != null)
                     {
                         if (menuItem.Icon.StartsWith("fa"))

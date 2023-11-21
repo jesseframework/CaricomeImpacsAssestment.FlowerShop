@@ -599,6 +599,14 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
 
             return orderHeaderQuery;
         }
-
+        public async Task UpdateOrderStatus(string orderStatus,Guid Id)
+        {
+            var updateOrder = await _orderHeaderRepository.GetAsync(Id);
+            if (updateOrder != null)
+            {
+                updateOrder.Status = orderStatus;
+                await _orderHeaderRepository.UpdateAsync(updateOrder);
+            }
+        }
     }
 }

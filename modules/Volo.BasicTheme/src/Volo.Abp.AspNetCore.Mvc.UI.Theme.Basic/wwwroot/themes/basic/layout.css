@@ -3,6 +3,15 @@
     text-decoration: none;
     color: #fff;
 }
+
+/*.navbar {
+    background-color: #bdbfc1;
+    color: #000;
+}
+
+.navbar .container .nav-item{
+    color: #000;
+}*/
  
 .navbar .dropdown-submenu {
     position: relative;

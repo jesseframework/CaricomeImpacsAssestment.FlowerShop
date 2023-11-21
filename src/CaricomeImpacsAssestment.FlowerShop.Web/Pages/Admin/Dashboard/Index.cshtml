@@ -1,15 +1,20 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using CaricomeImpacsAssestment.FlowerShop.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR
 @using Volo.Abp.Users
 @model CaricomeImpacsAssestment.FlowerShop.Web.Pages.Dashboard.IndexModel;
 @inject IHtmlLocalizer<FlowerShopResource> L
 @inject ICurrentUser CurrentUser
 
-@{
+@section scripts {
+    <abp-script type="typeof(SignalRBrowserScriptContributor)" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <abp-script src="/scripts-local/flowershop.js" />
+    <abp-script src="/Pages/Admin/Dashboard/Index.js" />
 }
 
-<div><h2>Dashboard</h2></div>
+<div><h2>DashBoard</h2></div>
 <p>
 <div class="container">
 	<div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
@@ -19,7 +24,7 @@
 					<div class="d-flex align-items-center">
 						<div>
 							<p class="mb-0 text-secondary">Total Orders</p>
-							<h4 class="my-1 text-info">4805</h4>
+							<h4 class="my-1 text-info" id="total-order">0</h4>
 							<p class="mb-0 font-13">+2.5% from last week</p>
 						</div>
 						<div class="widgets-icons-2 rounded-circle bg-gradient-scooter text-white ms-auto">
@@ -35,7 +40,7 @@
 					<div class="d-flex align-items-center">
 						<div>
 							<p class="mb-0 text-secondary">Total Revenue</p>
-							<h4 class="my-1 text-danger">$84,245</h4>
+							<h4 class="my-1 text-danger" id="total-revenue">$0</h4>
 							<p class="mb-0 font-13">+5.4% from last week</p>
 						</div>
 						<div class="widgets-icons-2 rounded-circle bg-gradient-bloody text-white ms-auto">
@@ -67,7 +72,7 @@
 					<div class="d-flex align-items-center">
 						<div>
 							<p class="mb-0 text-secondary">Total Customers</p>
-							<h4 class="my-1 text-warning">8.4K</h4>
+							<h4 class="my-1 text-warning" id="total-customers">0</h4>
 							<p class="mb-0 font-13">+8.4% from last week</p>
 						</div>
 						<div class="widgets-icons-2 rounded-circle bg-gradient-blooker text-white ms-auto">
@@ -84,51 +89,3 @@
 <div><h2>Volumes by Categories</h2></div>
 <div data-v-6a145b43="" class="chart-view"><canvas id="BarChart" width="800" height="400" style="display: block; box-sizing: border-box; height: 400px; width: 800px;"></canvas></div>
 </p>
-
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-
-	const labels = ["Irises", "Lilies", "Tulips", "Roses", "Orchids"];
-	const data = {
-		labels: labels,
-		datasets: [{
-			label: 'My First Dataset',
-			data: [65, 59, 80, 81, 56, 55, 40],
-			backgroundColor: [
-				'rgba(255, 99, 132, 0.2)',
-				'rgba(255, 159, 64, 0.2)',
-				'rgba(255, 205, 86, 0.2)',
-				'rgba(75, 192, 192, 0.2)',
-				'rgba(54, 162, 235, 0.2)',
-				'rgba(153, 102, 255, 0.2)',
-				'rgba(201, 203, 207, 0.2)'
-			],
-			borderColor: [
-				'rgb(255, 99, 132)',
-				'rgb(255, 159, 64)',
-				'rgb(255, 205, 86)',
-				'rgb(75, 192, 192)',
-				'rgb(54, 162, 235)',
-				'rgb(153, 102, 255)',
-				'rgb(201, 203, 207)'
-			],
-			borderWidth: 1
-		}]
-	};
-
-	const config = {
-		type: 'bar',
-		data: data,
-		options: {
-			scales: {
-				y: {
-					beginAtZero: true
-				}
-			}
-		},
-	};
-
-	const ctx = document.getElementById('BarChart');
-	new Chart(ctx, config);
-</script>

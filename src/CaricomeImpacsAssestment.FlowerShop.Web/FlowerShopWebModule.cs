@@ -231,7 +231,7 @@ public class FlowerShopWebModule : AbpModule
         app.UseConfiguredEndpoints();
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapHub<DateUpdateHub>("/dateUpdateHub");
+            endpoints.MapHub<orderDetailsUpdateHub>("/orderDetailsUpdateHub");
         });
     }
 }

@@ -1,41 +1,39 @@
 $(document).ready(function () {
     var baseUrl = `${window.location.protocol}//${window.location.host}`;
 
-    function deleteCustomerAccount(button) {
-        return new Promise((resolve, reject) => {
-            var id = button.attr('id').split('_')[1];
-            var url = `${baseUrl}/api/app/customer-account/${encodeURIComponent(id)}`;
+    function updateOrder(updatecartbutton) {
+        var orderStatus = $('#order-status').val();
+        var id = $('#order-header-id').val();
 
-            abp.ajax({
-                url: url,
-                type: 'DELETE',
-                contentType: 'application/json',
-                success: function (response) {
-                    resolve(response);
-                    
-                },
-                error: function (error) {
-                    reject(error);
-                    abp.notify.error('An error occurred while deleting the customer account: ' + error.statusText);
-                }
-            });
+        var url = `${baseUrl}/api/app/complete-and-check-out/order-status/${encodeURIComponent(id)}?orderStatus=${encodeURIComponent(orderStatus)}`;
+        debugger
+        abp.ajax({
+            url: url,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify({
+               
+            }),
+            success: function (response) {
+                abp.notify.success('Order Status Update successfully.');
+                window.location.href = '/Admin/Order';
+            },
+            error: function (error) {
+                abp.notify.error('An error occurred while updating order status: ' + error.statusText);
+            }
         });
     }
 
-    $('.delete-cust').click(function (e) {
+    $('#order-status-butrton').click(function (e) {
         e.preventDefault();
         var button = $(this);
         abp.message.confirm('Are you sure to delete customer?')
             .then(function (confirmed) {
                 if (confirmed) {
                     abp.ui.block({ busy: true });
-                    deleteCustomerAccount(button).then(() => {
-                        abp.ui.unblock();
-                        abp.notify.success('Account was deleted successfully.');
-                        window.location.reload(); 
-                    }).catch((error) => {
-                        abp.notify.error('An error occurred: ' + error.statusText);
-                    });
+                    updateOrder(button);
+                    abp.ui.unblock();
+                    window.location.reload();
                 }
             });
     });

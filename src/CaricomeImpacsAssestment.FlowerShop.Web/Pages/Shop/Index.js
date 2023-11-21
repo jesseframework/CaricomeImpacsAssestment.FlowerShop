@@ -1,19 +1,19 @@
 $(function () {
-    var connection = new signalR.HubConnectionBuilder().withUrl("/dateUpdateHub").build();
+    //var connection = new signalR.HubConnectionBuilder().withUrl("/dateUpdateHub").build();
 
-    connection.start().then(function () {
+    ////connection.start().then(function () {
         
-        connection.invoke("SubscribeToUpdates");
+    ////    connection.invoke("SubscribeToUpdates");
 
-        connection.on("ReceiveDateUpdate", function (message) {
+    ////    connection.on("ReceiveDateUpdate", function (message) {
             
-            console.log("message:", message);
+    ////        console.log("message:", message);
 
-            $('[data-product-id="' + message.id + '"]').find('.product-name').text(message.name);
-        });
+    ////        $('[data-product-id="' + message.id + '"]').find('.product-name').text(message.name);
+    ////    });
 
-    }).catch(function (err) {
-        return console.error(err.toString());
-    });
+    ////}).catch(function (err) {
+    ////    return console.error(err.toString());
+    ////});
 
 });
