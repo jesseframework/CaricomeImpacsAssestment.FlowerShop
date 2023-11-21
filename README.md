@@ -2,13 +2,13 @@
 
 Once you download the project, please follow these instructions to run it:
 
-1. Install .NET Core SDK: Ensure that your .NET Core versions are up to date, ranging from 2.0 to 8.0.
+1. Install .NET Core SDK: Ensure that your.NET Core versions are up to date, ranging from 2.0 to 8.0.
 
 2. Install Yarn and Node.js: Make sure you have Yarn and Node.js installed on your system before trying to install ABP.
 
-3. Set up the Database Connection String: In the `appconfiguration.json` file, configure the database connection string for DB migration and the web project.
+3. Set up the MySQL database connection string to your Windwos MySQL Server: In the `appconfiguration.json` file, configure the database connection string for DB migration and the web project.
 
-4. Install ABP Library:
+4. Install the ABP library running the project:
    - From the web project directory, open a .NET command prompt.
    - Run the following command to install ABP libraries:
      ```
@@ -23,6 +23,7 @@ Once you download the project, please follow these instructions to run it:
    - Add ABP SignalR Package:
      ```
      abp add-package Volo.Abp.AspNetCore.SignalR
+     
      ```
    - Install SignalR:
      ```
