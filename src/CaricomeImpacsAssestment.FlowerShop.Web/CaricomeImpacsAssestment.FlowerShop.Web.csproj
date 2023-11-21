@@ -17,9 +17,13 @@
 
   <ItemGroup>
     <Compile Remove="Logs\**" />
+    <Compile Remove="Pages\Admin\Customer\Old\**" />
     <Content Remove="Logs\**" />
+    <Content Remove="Pages\Admin\Customer\Old\**" />
     <EmbeddedResource Remove="Logs\**" />
+    <EmbeddedResource Remove="Pages\Admin\Customer\Old\**" />
     <None Remove="Logs\**" />
+    <None Remove="Pages\Admin\Customer\Old\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,7 +60,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Admin\Order\" />
     <Folder Include="wwwroot\images\logo\" />
     <Folder Include="wwwroot\images\appimages\" />
   </ItemGroup>

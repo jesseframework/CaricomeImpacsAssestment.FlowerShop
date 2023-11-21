@@ -48,7 +48,7 @@
                                                 </p>
                                                 <dl class="small m-b-none">
                                                     <dt>More Detail</dt>
-                                                    @* <dd>@product.LongDescription</dd> *@
+                                                    
                                                     @functions {
                                                     private int WordCount(string text)
                                                     {
@@ -60,9 +60,9 @@
                                                     <dd>
                                                         @if (WordCount(product.LongDescription) > 10)
                                                             {
-                                                                @* <a href="link-to-full-description">Click for more</a> *@
+                                                                <a href="link-to-full-description">Click for more</a>
                                                                 <span class="short-description">
-                                                                    @product.LongDescription.Substring(0, 100) <!-- Adjust as needed to show a part of the description -->
+                                                                    @product.LongDescription.Substring(0, 100) 
                                                                     ... <a href="javascript:void(0)" onclick="showFullDescription()">Click for more</a>
                                                                 </span>
                                                                 <span class="full-description" style="display:none;">

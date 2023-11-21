@@ -70,7 +70,22 @@ public class FlowerShopMenuContributor : IMenuContributor
                ).AddItem(
                    new ApplicationMenuItem(
                        "AddItems",
-                       l["Items"],
+                       l["Dashboard"],
+                       icon: "fas fa-stock",
+                       url: "/Admin/Dashboard"
+                   )
+            ).AddItem(
+                   new ApplicationMenuItem(
+                       "AddItems",
+                       l["Order Management"],
+                       icon: "fas fa-stock",
+                       url: "/Items"
+                   )
+            )
+            .AddItem(
+                   new ApplicationMenuItem(
+                       "AddItems",
+                       l["Product Management"],
                        icon: "fas fa-stock",
                        url: "/Items"
                    )

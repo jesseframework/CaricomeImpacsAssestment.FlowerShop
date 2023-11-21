@@ -1,15 +1,12 @@
-
 using CaricomeImpacsAssestment.FlowerShop.Customer;
 using CaricomeImpacsAssestment.FlowerShop.Customer.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 
-namespace CaricomeImpacsAssestment.FlowerShop.Web.Pages.Admin.Customer.Update
+namespace CaricomeImpacsAssestment.FlowerShop.Web.Pages.Admin.Order.Detail
 {
     public class IndexModel : PageModel
     {
@@ -48,7 +45,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Web.Pages.Admin.Customer.Update
         [BindProperty(SupportsGet = true)]
         public Guid CustomerId { get; set; }
 
-        
+
         private PagedAndSortedResultRequestDto _pg = new PagedAndSortedResultRequestDto
         {
             SkipCount = 0,
@@ -62,17 +59,16 @@ namespace CaricomeImpacsAssestment.FlowerShop.Web.Pages.Admin.Customer.Update
             CustomerList = await _customerAccountAppService.GetAsync(id);
             SelectedBillingAddress = await _addressAppService.GetBillingAddress(CustomerList.BillingAddressId);
             SelectedShippingAddress = await _addressAppService.GetShippingAddress(CustomerList.ShippingAddressId);
-            if(CustomerList != null)
+            if (CustomerList != null)
             {
                 ContactList = await _contactAppService.GetAsync(CustomerList.ContactId);
-                CountryList = await _countryAppService.GetListAsync(_pg); 
+                CountryList = await _countryAppService.GetListAsync(_pg);
                 CurrencyList = await _currencyAppService.GetListAsync(_pg);
             }
-            
-            
-            
+
+
+
         }
     }
 }
-
-
+}

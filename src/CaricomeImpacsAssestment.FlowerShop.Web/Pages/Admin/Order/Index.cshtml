@@ -1,19 +1,18 @@
-@page
+﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using CaricomeImpacsAssestment.FlowerShop.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR;
 @using Volo.Abp.Users
-@model CaricomeImpacsAssestment.FlowerShop.Web.Pages.Admin.Customer.IndexModel
+@model CaricomeImpacsAssestment.FlowerShop.Web.Pages.Admin.Order.IndexModel
 @inject IHtmlLocalizer<FlowerShopResource> L
 @inject ICurrentUser CurrentUser
 @section styles {
-    <abp-style src="/Pages/Admin/Customer/Index.css" />
+    <abp-style src="/Pages/Admin/Order/Index.css" />
 }
 @section scripts
 {
-    <abp-script src="/Pages/Admin/Customer/Index.js" />
+    <abp-script src="/Pages/Admin/Order/Index.js" />
 }
-
 <div class="container bootstrap snippets bootdey">
     <div class="row">
         <div class="col-lg-12">
@@ -44,12 +43,14 @@
                         <table class="table user-list">
                             <thead>
                                 <tr>
-                                    <th><span>Customer Name</span></th>
-                                    <th><span>Street</span></th>
-                                    <th> <span>City</span></th>
-                                    <th><span>State</span></th>
-                                    <th><span>Country</span></th>
-                                    <th><span>Email</span></th>
+                                    <th>Item No</th>
+                                    <th>Item Name</th>
+                                    <th>Description</th>
+                                    <th>Group</th>
+                                    <th>Unit Price</th>
+                                    <th>Quantity</th>
+                                    <th>Line Total</th>
+                                    <th>Actions</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
@@ -57,30 +58,25 @@
                                 @foreach (var customer in Model.CustomerAccountList)
                                 {
                                     <tr>
-                                        <td>
-                                            @customer.account.Name
-                                        </td>
-                                        <td>
-                                            @customer.address.Street
-                                        </td>
-                                        <td>
-                                            @customer.address.City
-                                        </td>
-                                        <td>
-                                            @customer.address.State
-                                        </td>
-                                        <td>
-                                            @customer.country.Name
-                                        </td>
-                                        <td>
-                                            <a href="mailto:@customer.account.Email">@customer.account.Email</a>
-                                        </td>
+                                        <td>@item.ItemNo</td>
+                                        <td>@item.ItemName</td>
+                                        <td>@item.ShortDescription</td>
+                                        <td>@item.Group</td>
+                                        <td>@item.UnitPrice</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.LineTotal</td>                                        
                                         <td>
 
                                             <a href="/Admin/Customer/Update/@customer.account.Id" class="table-link  text-info">
                                                 <span class="fa-stack">
                                                     <i class="fa fa-square fa-stack-2x"></i>
-                                                    <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+                                                    <i class="fa fa-reorder fa-stack-1x fa-inverse"></i>
+                                                </span>
+                                            </a>
+                                            <a href="" id="customer-account-id_@customer.account.Id" class="table-link danger delete-cust">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-square fa-stack-2x"></i>
+                                                    <i class="fa fa-print-o fa-stack-1x fa-inverse"></i>
                                                 </span>
                                             </a>
                                             <a href="" id="customer-account-id_@customer.account.Id" class="table-link danger delete-cust">

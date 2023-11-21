@@ -28,6 +28,12 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         CreateUpdateOrderHeaderDto>,
         IOrderHeaderAppService
     {
+        private readonly IRepository<CustomerAccount, Guid> _customerRepository;
+        private readonly IRepository<Country, Guid> _countryRepository;
+        private readonly IRepository<Currency, Guid> _currencyRepository;
+        private readonly IRepository<Contact, Guid> _contactRepository;
+        private readonly IRepository<Address, Guid> _addressRepository;
+        private readonly IRepository<AddressType, Guid> _addressTypeRepository;
         private readonly IRepository<OrderHeader, Guid> _orderHeaderRepository;
         private readonly IRepository<Coupon, Guid> _couponRepository;
         private readonly IRepository<OrderDetail, Guid> _orderDetailRepository;
@@ -50,6 +56,12 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             IOrderDetailTempAppService orderDetailTempAppService,
             IRepository<OrderPayment, Guid> orderPaymentRepository,
             IRepository<Coupon, Guid> couponRepository,
+             IRepository<Country, Guid> countryRepository,
+            IRepository<Currency, Guid> currencyRepository,
+            IRepository<CustomerAccount, Guid> customerRepository,
+            IRepository<Contact, Guid> contactRepository,
+            IRepository<Address, Guid> addressRepository,
+            IRepository<AddressType, Guid> addressTypeRepository,
             IRepository<OrderDetail, Guid> orderDetailRepository) : base(orderHeaderRepository) 
         {
             _orderHeaderRepository = orderHeaderRepository;
@@ -62,6 +74,12 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             _browserInfomation = browserInfomation;
             _cookieService = cookieService;
             _couponRepository = couponRepository;
+            _addressRepository = addressRepository;
+            _customerRepository = customerRepository;
+            _contactRepository = contactRepository;
+            _addressTypeRepository = addressTypeRepository;
+            _countryRepository = countryRepository;
+            _currencyRepository = currencyRepository;
         }
         public async Task<ResponseStatusCodesDto> CreateCompleteOrderAsync(CreateUpdateOrderHeaderDtoMin input)
         {
@@ -377,5 +395,45 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
 
             return orderHeaderQuery;
         }
+
+        public async Task<CustomerAllDto> GetAllByIdCustomersWithReference(Guid Id)
+        {
+            //Am aware that this section of my code could have db perfromance issue if am dealing with large data.
+            var _address = await _addressRepository.GetListAsync();
+            var _contact = await _contactRepository.GetListAsync();
+            var _account = await _customerRepository.GetListAsync();
+            var _country = await _countryRepository.GetListAsync();
+            var _currency = await _currencyRepository.GetListAsync();
+
+            var mapAddress = ObjectMapper.Map<List<Address>, List<AddressDto>>(_address);
+            var mapContact = ObjectMapper.Map<List<Contact>, List<ContactDto>>(_contact);
+            var mapAccount = ObjectMapper.Map<List<CustomerAccount>, List<CustomerAccountDto>>(_account);
+            var mapCurrency = ObjectMapper.Map<List<Currency>, List<CurrencyDto>>(_currency);
+            var mapCountry = ObjectMapper.Map<List<Country>, List<CountryDto>>(_country);
+
+            var queryResult = (from account in mapAccount
+                               join address in mapAddress on account.BillingAddressId equals address.Id
+                               join contact in mapContact on account.ContactId equals contact.Id
+                               join country in mapCountry on account.CountryId equals country.Id
+                               join currency in mapCurrency on account.CurrencyId equals currency.Id
+                               where
+                               account.IsDeleted == false
+                               && account.Id == Id
+                               select new CustomerAllDto
+                               {
+                                   account = account,
+                                   contact = contact,
+                                   address = address,
+                                   country = country,
+                                   currency = currency,
+
+
+                               }).SingleOrDefault();
+
+            return queryResult;
+
+
+        }
+
     }
 }

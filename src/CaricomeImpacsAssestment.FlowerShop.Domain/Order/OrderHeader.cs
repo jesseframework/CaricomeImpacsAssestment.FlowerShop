@@ -7,7 +7,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
     {
         public OrderHeader() { }
         public string OrderNo { get; set; }
-        public string Status { get; set; }
+        public string Status { get; set; } //Pending,Processing,On Hold,Paid,Shipped/Delivered,Completed,Cancelled,Refunded,Failed,Backordered
         public Guid CookieTrackerId { get; set; }
         public DateTime OrderDate { get; set; }
         public Guid CustomerAccountId { get; set; }

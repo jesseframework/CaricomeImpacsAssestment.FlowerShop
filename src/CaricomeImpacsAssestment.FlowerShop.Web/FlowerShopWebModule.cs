@@ -107,6 +107,10 @@ public class FlowerShopWebModule : AbpModule
         services.AddTransient<ICustomerAccountAppService, CustomerAccountAppService>();
         services.AddTransient<ICountryAppService, CountryAppService>();
         services.AddTransient<ICurrencyAppService, CurrencyAppService>();
+        services.AddTransient<IAddressAppService, AddressAppService>();
+        services.AddTransient<IContactAppService, ContactAppService>();
+
+        //IAddressAppService
 
     }
 

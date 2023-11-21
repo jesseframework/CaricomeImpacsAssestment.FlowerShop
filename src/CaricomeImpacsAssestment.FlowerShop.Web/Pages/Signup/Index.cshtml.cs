@@ -31,7 +31,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Web.Pages.Signup
             _countryAppService = countryAppService;
             _currencyAppService = currencyAppService;
         }
-
+       
         [BindProperty(SupportsGet = true)]
         public List<OrderWithItemDataDto> checkOutList { get; set; }
         [BindProperty(SupportsGet = true)]
@@ -50,6 +50,10 @@ namespace CaricomeImpacsAssestment.FlowerShop.Web.Pages.Signup
             checkTotal = await _orderDetailTempAppService.GetShoppingCartAmountByCookieId(cookieUUID);
             countryList = await _countryAppService.GetListAsync(_pg);
             currencyList = await _currencyAppService.GetListAsync(_pg);
+
+
+
+            
         }
 
         private string GetCookieValue(string cookieName)

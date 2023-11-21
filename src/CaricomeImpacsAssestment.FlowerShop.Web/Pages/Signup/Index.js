@@ -1,9 +1,6 @@
 $(document).ready(function () {
     var baseUrl = `${window.location.protocol}//${window.location.host}`;
-
-    //ToDo: Lookiup addresstype id from server
-    var adt = "3a0eefdd-0124-b1aa-4f8d-35f15c43b419";
-    var sdt = "3a0eefdd-47bb-7748-beec-ba3f3f20f0c3";
+    
     var setContactId = "";
     var currencyId = "";
 
