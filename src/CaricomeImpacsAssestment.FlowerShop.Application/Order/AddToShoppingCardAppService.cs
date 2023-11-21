@@ -38,6 +38,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         private readonly IRepository<ProductGroup, Guid> _productgroupRepository;
         private readonly IRepository<ItemPrice, Guid> _itempricesRepository;
         private readonly IRepository<Item, Guid> _itemRepository;
+        private readonly IRepository<CookieTracker, Guid> _cookietrackingRepository;
         public AddToShoppingCardAppService(
              IRepository<Category, Guid> categoryRepository,
              IRepository<Coupon, Guid> couponRepository,
@@ -48,7 +49,8 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             CookieService cookieService,
             UserCookieManager userCookieManager,
             IItemAppService itemAppService, 
-            IRepository<OrderDetailTemp, Guid> orderdetailTeamRepository) : base(orderdetailTeamRepository)
+            IRepository<OrderDetailTemp, Guid> orderdetailTeamRepository,
+            IRepository<CookieTracker, Guid> cookietrackingRepository) : base(orderdetailTeamRepository)
         {
             _orderdetailTeamRepository = orderdetailTeamRepository;
             _itemAppService = itemAppService;            
@@ -60,6 +62,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             _itempricesRepository = itempricesRepository;
             _itemRepository = itemRepository;
             _couponRepository = couponRepository;
+            _cookietrackingRepository = cookietrackingRepository;
         }
         public async Task<ResponseStatusCodesDto> CreateShoppingCart(CreateUpdateOrderDetailTempMin input)
         {
@@ -71,6 +74,15 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                     _userCookieManager);
 
                 var checkCookieId = await validateCookie.IsCookieValid();
+                var _orderNo = await _cookietrackingRepository.GetAsync(checkCookieId);
+                if (_orderNo == null)
+                {
+                    return new ResponseStatusCodesDto
+                    {
+                        StatusCode = _orderNo == null ? 700 : 800,
+                        StatusMessage = "No Order No"
+                    };
+                }
 
                 var itemAllData = await _itemAppService.GetItems(input.ItemId);
                 if (itemAllData == null)
@@ -93,7 +105,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                 var temCart = new CreateUpdateOrderDetailTempDto()
                 {
                     ItemId = input.ItemId,
-                    OrderNo = input.OrderNo,
+                    OrderNo = _orderNo.OrderNo,
                     CookieTrackerId = checkCookieId,
                     OrderDate = DateTime.Now,
                     TaxID = "Tax",
@@ -225,9 +237,15 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
 
             var orderTempData = await _orderdetailTeamRepository.GetListAsync(p => p.CookieTrackerId == cookieId);
             var orderTempQuery = (from detail in orderTempData
-                                  group detail by detail.CookieTrackerId into g
+                                  group detail by new 
+                                  {
+                                      detail.CookieTrackerId,
+                                      detail.OrderNo
+
+                                  }  into g
                                   select new OrderDetailTempDto
                                   {                                     
+                                      OrderNo = g.Key.OrderNo,
                                       LineTotal = g.Sum(x => x.LineTotal),
                                       Shipping = g.Sum(x => x.Shipping),
                                       Quantity = g.Count()

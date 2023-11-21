@@ -7,6 +7,8 @@ using CaricomeImpacsAssestment.FlowerShop.Payment;
 using CaricomeImpacsAssestment.FlowerShop.Payment.Dto;
 using CaricomeImpacsAssestment.FlowerShop.Product;
 using CaricomeImpacsAssestment.FlowerShop.Product.Dto;
+using CaricomeImpacsAssestment.FlowerShop.Setting.Dto;
+using CaricomeImpacsAssestment.FlowerShop.Settings;
 
 namespace CaricomeImpacsAssestment.FlowerShop;
 
@@ -74,5 +76,8 @@ public class FlowerShopApplicationAutoMapperProfile : Profile
 
         CreateMap<Tax, TaxDto>();
         CreateMap<CreateUpdateTaxDto, Tax>();
+
+        CreateMap<SerialNumber, SerialNumberDto>();
+        CreateMap<CreateUpdateSerialNumberDto, SerialNumber>();
     }
 }

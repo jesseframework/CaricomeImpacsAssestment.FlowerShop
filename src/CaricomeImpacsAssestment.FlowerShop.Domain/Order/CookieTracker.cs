@@ -13,6 +13,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         public bool IsSecure { get; set; }
         public bool IsHttpOnly { get; set; }
         public Guid? OrderId { get; set; }
+        public string OrderNo { get; set; }
         public Guid? UserId { get; set; }
     }
 }

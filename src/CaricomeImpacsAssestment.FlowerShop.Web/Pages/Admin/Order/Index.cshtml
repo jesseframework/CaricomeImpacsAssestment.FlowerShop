@@ -22,12 +22,12 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-6">
-                            <h4 class="card-title">Customer List</h4>
+                            <h4 class="card-title">Order List</h4>
                         </div>
                         <div class="col-md-6">
                             <!-- Search Box -->
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search customer...">
+                                <input type="text" class="form-control" placeholder="Search Order...">
                                 <div class="input-group-append">
                                     <button class="btn btn-secondary" type="button">
                                         <i class="fa fa-search"></i>
@@ -43,43 +43,49 @@
                         <table class="table user-list">
                             <thead>
                                 <tr>
-                                    <th>Item No</th>
-                                    <th>Item Name</th>
-                                    <th>Description</th>
-                                    <th>Group</th>
-                                    <th>Unit Price</th>
-                                    <th>Quantity</th>
-                                    <th>Line Total</th>
+                                    <th>Customer</th>
+                                    <th>Order No</th>
+                                    <th>Order Date</th>                                   
+                                    <th>Quantity</th>                                                                    
+                                    <th>Total Due</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                     <th>&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var customer in Model.CustomerAccountList)
+                                @foreach (var order in Model.OrderTrackingList)
                                 {
                                     <tr>
-                                        <td>@item.ItemNo</td>
-                                        <td>@item.ItemName</td>
-                                        <td>@item.ShortDescription</td>
-                                        <td>@item.Group</td>
-                                        <td>@item.UnitPrice</td>
-                                        <td>@item.Quantity</td>
-                                        <td>@item.LineTotal</td>                                        
+                                        <td>
+                                            <div><strong>Cust Name:</strong> @order.Name</div>
+                                            <div><strong>Street:</strong> @order.Street</div>
+                                            <div><strong>City:</strong> @order.City</div>
+                                            <div><strong>Country:</strong> @order.CountryName</div>
+                                        </td>                                       
+                                        <td>@order.OrderNo</td>
+                                        <td>@order.OrderDate</td>
+                                        <td>@order.Quantity</td>
+                                        <td>$@order.TotalDue.ToString("0.00")</td>
+                                        <td>@order.Status</td>
+                                        
+                                        
+
                                         <td>
 
-                                            <a href="/Admin/Customer/Update/@customer.account.Id" class="table-link  text-info">
+                                            <a href="/Admin/Order/Detail/@order.OrderNo" class="table-link  text-info">
                                                 <span class="fa-stack">
                                                     <i class="fa fa-square fa-stack-2x"></i>
                                                     <i class="fa fa-reorder fa-stack-1x fa-inverse"></i>
                                                 </span>
                                             </a>
-                                            <a href="" id="customer-account-id_@customer.account.Id" class="table-link danger delete-cust">
+                                            <a href="" id="customer-account-id_@order.OrderNo" class="table-link danger delete-cust">
                                                 <span class="fa-stack">
                                                     <i class="fa fa-square fa-stack-2x"></i>
-                                                    <i class="fa fa-print-o fa-stack-1x fa-inverse"></i>
+                                                    <i class="fa fa-print fa-stack-1x fa-inverse"></i>
                                                 </span>
                                             </a>
-                                            <a href="" id="customer-account-id_@customer.account.Id" class="table-link danger delete-cust">
+                                            <a href="" id="customer-account-id_@order.OrderNo" class="table-link danger delete-cust">
                                                 <span class="fa-stack">
                                                     <i class="fa fa-square fa-stack-2x"></i>
                                                     <i class="fa fa-trash-o fa-stack-1x fa-inverse"></i>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CaricomeImpacsAssestment.FlowerShop.Settings;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,11 +13,13 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Manager
     public class UserCookieManager : DomainService
     {
         private readonly IRepository<CookieTracker, Guid> _cookietrackerRepository;
+        private readonly IRepository<SerialNumber, Guid> _serailNumberRepository;
         public UserCookieManager(
-            IRepository<CookieTracker, Guid> cookietrackerRepository) 
+            IRepository<CookieTracker, Guid> cookietrackerRepository,
+            IRepository<SerialNumber, Guid> serailNumberRepository) 
         {
             _cookietrackerRepository = cookietrackerRepository;
-
+            _serailNumberRepository = serailNumberRepository;
 
         }
         public async Task<Guid> SaveCookieAsync(             
@@ -26,6 +29,10 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Manager
         {
             bool changeMade = false;
             Guid cookieId = Guid.NewGuid();
+
+            SerialNumberGeneratorService _numberGenerator = new SerialNumberGeneratorService(_serailNumberRepository);
+            var _orderNo = await _numberGenerator.GetSerialNoAsync(type: "Order", accountNo: "", partnerNo: "");
+
             var userSessionCookie = new CookieTracker()
             {
                 Name = "Browser_Cart_Session",
@@ -34,7 +41,9 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Manager
                 Path = path,
                 Expiry = DateTime.Now.AddMinutes(4320),
                 IsSecure = true,
-                IsHttpOnly = false                
+                IsHttpOnly = false,
+                OrderNo = _orderNo,
+                
                 
             };
 
@@ -42,7 +51,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Manager
                 .GetListAsync(p=>p.Value.Equals(cookieValue) || p.Expiry < DateTime.Now);
             if (!userCookieNoInDb.Any())
             {
-                await _cookietrackerRepository.InsertAsync(userSessionCookie);
+                await _cookietrackerRepository.InsertAsync(userSessionCookie);                
                 cookieId = userSessionCookie.Id;
             }
             else
@@ -52,7 +61,8 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Manager
                 {
                     userCookieInDb.Value = cookieValue;
                     userCookieInDb.UserId = cookieId; 
-                    userCookieInDb.OrderId = cookieId; 
+                    userCookieInDb.OrderId = cookieId;
+                    
 
                     changeMade = true;
                     cookieId = userCookieInDb.Id;

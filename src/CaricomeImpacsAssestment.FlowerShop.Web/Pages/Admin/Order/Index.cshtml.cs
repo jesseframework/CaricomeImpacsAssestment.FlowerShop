@@ -1,5 +1,7 @@
 using CaricomeImpacsAssestment.FlowerShop.Customer;
 using CaricomeImpacsAssestment.FlowerShop.Customer.Dto;
+using CaricomeImpacsAssestment.FlowerShop.Order;
+using CaricomeImpacsAssestment.FlowerShop.Order.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
@@ -9,20 +11,20 @@ namespace CaricomeImpacsAssestment.FlowerShop.Web.Pages.Admin.Order
 {
     public class IndexModel : PageModel
     {
-        private readonly ICustomerAccountAppService _customerAccountAppService;
+        private readonly IOrderHeaderAppService _orderHeaderAppService;
 
-        public IndexModel(ICustomerAccountAppService customerAccountAppService)
+        public IndexModel(IOrderHeaderAppService orderHeaderAppService)
         {
-            _customerAccountAppService = customerAccountAppService;
+            _orderHeaderAppService = orderHeaderAppService;
         }
 
 
-        public List<CustomerAllDto> CustomerAccountList = new List<CustomerAllDto>();
+        public List<OrderWithItemDataDto> OrderTrackingList = new List<OrderWithItemDataDto>();
 
 
         public async Task OnGetAsync()
         {
-            CustomerAccountList = await _customerAccountAppService.GetAllCustomersWithReference();
+            OrderTrackingList = await _orderHeaderAppService.GetOrderAllOrderSum();
         }
 
 

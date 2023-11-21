@@ -1,4 +1,4 @@
-﻿@page "/admin/order/detail/{id:guid}"
+﻿@page "/admin/order/detail/{orderno}"
 @using Microsoft.AspNetCore.Mvc.Localization
 @using CaricomeImpacsAssestment.FlowerShop.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR;
@@ -17,143 +17,137 @@
 
     <div class="container">
         <!-- Title -->
-        <div class="d-flex justify-content-between align-items-lg-center py-3 flex-column flex-lg-row">
-            <h2 class="h5 mb-3 mb-lg-0"><a href="../../pages/admin/customers.html" class="text-muted"><i class="bi bi-arrow-left-square me-2"></i></a>Customer Account</h2>
-            <div class="hstack gap-3">
-                <a href="/Admin/Customer/" class="btn btn-light btn-sm btn-icon-text"><i class="bi bi-x"></i> <span class="text">Cancel</span></a>
-                <button class="btn btn-primary btn-sm btn-icon-text save-cust" id="custooimer-update"><i class="bi bi-save"></i><span class="text">Save</span></button>
-                <input id="contact-id" type="text" hidden="hidden" value="@Model.ContactList.Id" class="form-control">
-                <input id="billione-address-id" type="text" hidden="hidden" value="@Model.SelectedBillingAddress.Id" class="form-control">
-                <input id="shipping-address-id" type="text" hidden="hidden" value="@Model.SelectedBillingAddress.Id" class="form-control">
-            </div>
+        <div class="d-flex justify-content-between align-items-center py-3">
+            <h2 class="h5 mb-0"><a href="#" class="text-muted"></a> Order #16123222</h2>
         </div>
 
         <!-- Main content -->
         <div class="row">
-            <!-- Left side -->
             <div class="col-lg-8">
-                <!-- Basic information -->
+                <!-- Details -->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h3 class="h6 mb-4">Basic information</h3>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">First name</label>
-                                    <input id="IdFirstName" type="text" value="@Model.ContactList.FirstName" class="form-control">
-                                    <input id="IdbillingId" type="text" hidden="hidden" value="@Model.SelectedBillingAddress.AddressTypeId" class="form-control">
-                                    <input id="IdshippingId" type="text" hidden="hidden" value="@Model.SelectedShippingAddress.AddressTypeId" class="form-control">
-                                    <input id="ShippingCountryId" type="text" hidden="hidden" value="@Model.SelectedShippingAddress.CountryId" class="form-control">
-                                    <input id="billingCountryId" type="text" hidden="hidden" value="@Model.SelectedBillingAddress.CountryId" class="form-control">
-                                </div>
+                        <div class="mb-3 d-flex justify-content-between">
+                            <div>
+                                <span class="me-3">@Model.OrderHeaderGroup.OrderDate</span>
+                                <span class="me-3">#@Model.OrderHeaderGroup.OrderNo</span>
+                                <span class="me-3">Visa -1234</span>
+                                <span class="badge rounded-pill bg-info">@Model.OrderHeaderGroup.Status</span>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Last name</label>
-
-                                    <input id="IdLastName" type="text" value="@Model.ContactList.LastName" class="form-control">
+                            <div class="d-flex">
+                                <button class="btn btn-link p-0 me-3 d-none d-lg-block btn-icon-text"><i class="bi bi-download"></i> <span class="text">Invoice</span></button>
+                                <div class="dropdown">
+                                    <button class="btn btn-link p-0 text-muted" type="button" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil"></i> Edit</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-printer"></i> Print</a></li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
+                        <table class="table table-borderless">
+                            <tbody>
+                                @foreach (var product in Model.OrderDetailList)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex mb-2">
+                                                <div class="flex-shrink-0">
+                                                    <img src="@product.IconUrl" alt="" width="35" class="img-fluid">
+                                                </div>
+                                                <div class="flex-lg-grow-1 ms-3">
+                                                    <h6 class="small mb-0"><a href="#" class="text-reset">@product.Name</a></h6>
+                                                    <span class="small">Group:@product.Group</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>@product.Quantity</td>
+                                        <td class="text-end">$@product.UnitPrice</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2">Subtotal</td>
+                                    <td class="text-end">$@Model.OrderHeaderGroup.SubTotal</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Shipping</td>
+                                    <td class="text-end">$@Model.OrderHeaderGroup.Shipping</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Discount (Code: @Model.OrderHeaderGroup.CouponCode)</td>
+                                    <td class="text-danger text-end">-$@Model.OrderHeaderGroup.TotalDiscount</td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td colspan="2">TOTAL</td>
+                                    <td class="text-end">$@Model.OrderHeaderGroup.TotalDue</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <!-- Payment -->
+                <div class="card mb-4">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Email</label>
-                                    <input id="IdEmail" type="email" value="@Model.ContactList.Email" class="form-control">
-                                </div>
+                                <h3 class="h6">Payment Method</h3>
+                                <p>
+                                    Visa -1234 <br>
+                                    Total: $@Model.OrderHeaderGroup.TotalDue <span class="badge bg-success rounded-pill">Draft</span>
+                                </p>
                             </div>
                             <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Phone number</label>
-                                    <input id="IdPhoneNumber" type="text" value="@Model.ContactList.PhoneNumber" class="form-control">
-                                </div>
+                                <h3 class="h6">Billing address</h3>
+                                <address>
+                                    <strong>@(Model.ContactList.FirstName +" "+ @Model.ContactList.LastName)</strong><br>
+                                    @Model.SelectedBillingAddress.Street<br>
+                                    @Model.SelectedBillingAddress.City, @Model.SelectedBillingAddress.State @Model.SelectedBillingAddress.PostalCode<br>
+                                    <abbr title="Phone">P:</abbr> @Model.ContactList.PhoneNumber
+                                </address>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Billingh Address -->
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h3 class="h6 mb-4">Billing Address</h3>
-                        <div class="mb-3">
-                            <label class="form-label">Street</label>
-                            <textarea id="IdStreet" class="form-control">@Model.SelectedBillingAddress.Street</textarea>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <div class="mb-3">
-                                    <label class="form-label">City</label>
-                                    <input id="IdCity" type="text" value="@Model.SelectedBillingAddress.City" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="mb-3">
-                                    <label class="form-label">State</label>
-                                    <input id="IdState" type="text" value="@Model.SelectedBillingAddress.State" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="mb-3">
-                                    <label class="form-label">ZIP code</label>
-                                    <input id="IdPostalCode" type="text" value="@Model.SelectedBillingAddress.PostalCode" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Country</label>
-                                    <select class="form-control form-select" title="Country" id="billingCountryId">
-                                        <option value="0">Select Country</option>
-                                        @foreach (var country in Model.CountryList.Items)
-                                        {
-                                            <option value="@country.Id" selected=@(country.Id == @country.Id ? "selected" : "")>@country.Name</option>
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="form-label">Currency</label>
-                                    <select class="form-control form-select" title="Country" id="IdCurrency">
-                                        <option value="0">Select Currency</option>
-                                        @foreach (var currency in Model.CurrencyList.Items)
-                                        {
-                                            <option value="@currency.Id" selected=@(currency.Id == @currency.Id ? "selected" : "")>@currency.CurrencyName</option>
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Shipping Address -->
-                
             </div>
-            <!-- Right side -->
             <div class="col-lg-4">
-                <!-- Status -->
+                <!-- Customer Notes -->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h3 class="h6">Status</h3>
-                        <select class="form-select">
-                            <option value="draft" selected="">Draft</option>
-                            <option value="active">Active</option>
-                            <option value="active">Inactive</option>
-                        </select>
+                        <h3 class="h6">Customer Notes</h3>
+                        <div class="dropdown">
+                        <button class="btn btn-link p-0 text-muted" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-pencil"></i> Edit</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-printer"></i> Print</a></li>
+                        </ul>
+                    </div>
                     </div>
                 </div>
-
-                <!-- Notes -->
                 <div class="card mb-4">
+                    <!-- Shipping information -->
                     <div class="card-body">
-                        <h3 class="h6">Notes</h3>
-                        <textarea class="form-control" rows="6"></textarea>
+                        <h3 class="h6">Shipping Information</h3>
+                        <strong>FedEx</strong>
+                        <span><a href="#" class="text-decoration-underline" target="_blank">FF1234567890</a> <i class="bi bi-box-arrow-up-right"></i> </span>
+                        <hr>
+                        <h3 class="h6">Address</h3>
+                        <address>
+                            <strong>@(Model.ContactList.FirstName + " " + @Model.ContactList.LastName)</strong><br>
+                            @Model.SelectedShippingAddress.Street<br>
+                            @Model.SelectedShippingAddress.City, @Model.SelectedShippingAddress.State @Model.SelectedShippingAddress.PostalCode<br>
+                            <abbr title="Phone">P:</abbr> @Model.ContactList.PhoneNumber
+                        </address>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-
 </div>
+
+                            

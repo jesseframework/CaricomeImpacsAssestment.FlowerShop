@@ -78,8 +78,8 @@ public class FlowerShopMenuContributor : IMenuContributor
                    new ApplicationMenuItem(
                        "AddItems",
                        l["Order Management"],
-                       icon: "fas fa-stock",
-                       url: "/Items"
+                       icon: "fas fa-shopping-cart",
+                       url: "/Admin/Order"
                    )
             )
             .AddItem(

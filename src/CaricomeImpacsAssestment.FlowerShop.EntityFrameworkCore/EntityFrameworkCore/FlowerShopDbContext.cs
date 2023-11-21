@@ -2,6 +2,7 @@
 using CaricomeImpacsAssestment.FlowerShop.Order;
 using CaricomeImpacsAssestment.FlowerShop.Payment;
 using CaricomeImpacsAssestment.FlowerShop.Product;
+using CaricomeImpacsAssestment.FlowerShop.Settings;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -74,6 +75,7 @@ public class FlowerShopDbContext :
     public DbSet<Tax> Taxes { get; set; }
     public DbSet<CookieTracker> CookieTrackers { get; set; }
     public DbSet<Coupon> Coupons { get; set; }
+    public DbSet<SerialNumber> SerialNumbers { get; set; }
 
 
 
