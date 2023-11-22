@@ -27,7 +27,7 @@ $(document).ready(function () {
     $('#order-status-butrton').click(function (e) {
         e.preventDefault();
         var button = $(this);
-        abp.message.confirm('Are you sure to delete customer?')
+        abp.message.confirm('Are you sure to ship this order?')
             .then(function (confirmed) {
                 if (confirmed) {
                     abp.ui.block({ busy: true });

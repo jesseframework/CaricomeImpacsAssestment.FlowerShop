@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "/admin/product/items/edit/{id:guid}"
 @using Microsoft.AspNetCore.Mvc.Localization
 @using CaricomeImpacsAssestment.FlowerShop.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR;
@@ -7,23 +7,22 @@
 @inject IHtmlLocalizer<FlowerShopResource> L
 @inject ICurrentUser CurrentUser
 @section styles {
-    <abp-style src="/Pages/Admin/Items/Index.css" />
+    <abp-style src="/Pages/Admin/Product/Items/Edit/Index.css" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 }
 @section scripts
 {
-    <abp-script src="/Pages/Admin/Items/Index.js" />
+    <abp-script src="/Pages/Admin/Product/Items/Edit/Index.js" />
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script>
-        // Sample data structure for grid items
+        
         let gridData = [];
 
-        // Function to add price to the grid
-        function addPriceToGrid() {
-            // Create a new price object from the form fields
+       
+        function addPriceToGrid() {            
             let newPrice = {
                 pricingID: document.getElementById('pricingID').value,
                 priceOrDiscount: document.getElementById('priceOrDiscount').value,
@@ -39,26 +38,26 @@
                 shippingCost: document.getElementById('shippingCost').value
             };
 
-            // Add the new price to the grid data array
+           
             gridData.push(newPrice);
 
-            // Call function to update the grid display
+            
             updateGridDisplay();
         }
 
-        // Function to update the grid display
+        
         function updateGridDisplay() {
-            // Get the grid container
+           
             let gridContainer = document.getElementById('priceGrid');
 
-            // Clear the current grid contents
+            
             gridContainer.innerHTML = '';
 
-            // Create a table element
+           
             let table = document.createElement('table');
             table.classList.add('table', 'table-striped');
 
-            // Create the table header
+            
             let thead = document.createElement('thead');
             thead.innerHTML = `
                 <tr>                   
@@ -75,10 +74,10 @@
             `;
             table.appendChild(thead);
 
-            // Create the table body
+            
             let tbody = document.createElement('tbody');
 
-            // Add each grid item to the table body
+            
             gridData.forEach(item => {
                 let tr = document.createElement('tr');
                 tr.innerHTML = `                    
@@ -95,15 +94,26 @@
                 tbody.appendChild(tr);
             });
 
-            // Append the table body to the table
+            
             table.appendChild(tbody);
 
-            // Append the table to the grid container
+            
             gridContainer.appendChild(table);
         }
 
-        // Initial call to display the grid with any pre-existing data
+        
         updateGridDisplay();
+
+
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('imagePreview');
+                output.src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
     </script>
 }
 
@@ -123,7 +133,7 @@
         </li>
     </ul>
 
-    <!-- Tab panes -->
+   
     <div class="tab-content">
         <div id="items" class="container tab-pane active">
             <br>
@@ -131,13 +141,20 @@
                 <div class="card-header">
                     <h3>Items</h3>
                 </div>
-                <div class="card-body">
-                    <p>Manage items here.</p>
+                <div class="card-body">                    
                     <form method="post" action="/path-to-your-handler" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <label for="iconUrl">Icon URL</label>
-                            <input type="file" class="form-control-file" id="iconUrl" name="iconUrl">
-                        </div>
+                      
+                         <div class="form-group">
+                                <label for="iconUrl">Icon Image</label>
+                                <input type="file" class="form-control-file" id="iconUrl" name="iconUrl" onchange="previewImage(event)">
+                                </div>
+                                <div class="form-group">                            
+                                    <img id="imagePreview" src="/Pages/images/placeholder-1.png" style="width: 200px; height: auto;" alt="Image preview" />
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-upload"></i>
+                                </button>
+
                         <div class="form-group">
                             <label for="itemNo">Item Number</label>
                             <input type="text" class="form-control" id="itemNo" name="itemNo" required>
@@ -145,12 +162,12 @@
 
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                            <input type="text" class="form-control" id="name" value="@Model.ItemsList.allItems.Name" name="name" required>
                         </div>
 
                         <div class="form-group">
                             <label for="description">Description</label>
-                            <textarea class="form-control" id="description" name="description"></textarea>
+                            <textarea class="form-control" id="description" name="description">@Model.ItemsList.allItems.Description</textarea>
                         </div>
 
                         <div class="form-group">
@@ -167,29 +184,29 @@
                             </select>
                         </div>
 
-                        <!-- Add new fields here -->
+                      
 
                         <div class="form-group">
                             <label for="parent">Parent</label>
-                            <input type="text" class="form-control" id="parent" name="parent">
+                            <input type="text" class="form-control" id="parent" name="parent" value="@Model.ItemsList.allItems.Parent">
                         </div>
 
                         <div class="form-group">
                             <label for="longDescription">Long Description</label>
-                            <textarea class="form-control" id="longDescription" name="longDescription"></textarea>
+                            <textarea class="form-control" id="longDescription" name="longDescription">@Model.ItemsList.allItems.LongDescription</textarea>
                         </div>
 
                         <div class="form-group">
                             <label for="isActive">Is Active</label>
-                            <input type="checkbox" id="isActive" name="isActive">
+                            <input type="checkbox" id="isActive" name="isActive" value="@Model.ItemsList.allItems.IsActive">
                         </div>
 
                         <div class="form-group">
                             <label for="taxID">Tax ID</label>
-                            <input type="text" class="form-control" id="taxID" name="taxID">
+                            <input type="text" class="form-control" id="taxID" name="taxID" value="@Model.ItemsList.allItems.TaxID">
                         </div>
 
-                        <!-- Image upload fields -->
+                      
                         <div class="form-row">
                             <div class="form-group col-md-3">
                                 <label for="marketingImagesUrl">Marketing Image</label>
@@ -209,8 +226,7 @@
                             </div>
                         </div>
 
-                        <!-- Repeat for other image URLs -->
-                        <!-- ... -->
+                        
 
                         <button type="submit" class="btn btn-primary">Save Item</button>
                     </form>

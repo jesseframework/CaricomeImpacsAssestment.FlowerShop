@@ -1,4 +1,4 @@
-﻿@page "/admin/product/items/edit/{id:guid}"
+﻿@page 
 @using Microsoft.AspNetCore.Mvc.Localization
 @using CaricomeImpacsAssestment.FlowerShop.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR;
@@ -7,12 +7,12 @@
 @inject IHtmlLocalizer<FlowerShopResource> L
 @inject ICurrentUser CurrentUser
 @section styles {
-    <abp-style src="/Pages/Admin/Items/Index.css" />
+    <abp-style src="/Pages/Admin/Product/Items/Index.css" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 }
 @section scripts
 {
-    <abp-script src="/Pages/Admin/Items/Index.js" />
+    <abp-script src="/Pages/Admin/Product/Items/Index.js" />
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

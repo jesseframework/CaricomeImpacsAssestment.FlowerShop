@@ -2,6 +2,7 @@ using CaricomeImpacsAssestment.FlowerShop.Product;
 using CaricomeImpacsAssestment.FlowerShop.Product.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,10 +15,11 @@ namespace CaricomeImpacsAssestment.FlowerShop.Web.Pages.Admin.Product.item
         {
             _itemAppService = itemAppService;
         }
-
+        
         public List<ItemsAllJoinDto> itemsAllJoinDtos = new List<ItemsAllJoinDto>();
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(Guid id)
         {
+           
             itemsAllJoinDtos = await _itemAppService.GetAllItems();
         }
     }

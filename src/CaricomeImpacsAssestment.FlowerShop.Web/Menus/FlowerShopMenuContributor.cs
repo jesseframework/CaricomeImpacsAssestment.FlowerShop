@@ -111,43 +111,6 @@ public class FlowerShopMenuContributor : IMenuContributor
             administration.SetSubItemOrder(TenantManagementMenuNames.GroupName, 1);
 
             
-
-                //ToDo Remove and create admin olices
-            //    context.Menu.AddItem(
-            //   new ApplicationMenuItem(
-            //       "Management",
-            //       l["Management"],
-            //       icon: "fas fa-receipt"
-            //   ).AddItem(
-            //       new ApplicationMenuItem(
-            //           "AddCustomer",
-            //           l["Customer"],
-            //           icon: "fas fa-user",
-            //           url: "/Admin/Customer"
-            //       )
-            //   ).AddItem(
-            //       new ApplicationMenuItem(
-            //           "AddItems",
-            //           l["Dashboard"],
-            //           icon: "fas fa-chart-bar",
-            //           url: "/Admin/Dashboard"
-            //       )
-            //).AddItem(
-            //       new ApplicationMenuItem(
-            //           "AddItems",
-            //           l["Order Management"],
-            //           icon: "fas fa-shopping-cart",
-            //           url: "/Admin/Order"
-            //       )
-            //)
-            //.AddItem(
-            //       new ApplicationMenuItem(
-            //           "AddItems",
-            //           l["Product Management"],
-            //           icon: "fas fa-layer-group",
-            //           url: "/Admin/Product/Items"
-            //       )
-            //));
         }
         else
         {
