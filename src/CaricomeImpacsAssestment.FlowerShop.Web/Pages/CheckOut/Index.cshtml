@@ -109,7 +109,7 @@
                         <span>Shipping</span> <span>$@Model.orderHeader.Shipping</span>
                     </div>
                     <div class="d-flex justify-content-between mb-1 small">
-                        <span>Coupon (Code: NEWYEAR)</span> <span class="text-danger">-$@Model.orderHeader.TotalDiscount</span>
+                        <span>Coupon (Code:@Model.orderHeader.CouponCode )</span> <span class="text-danger">-$@Model.orderHeader.TotalDiscount</span>
                     </div>
                     <hr>
                     <div class="d-flex justify-content-between mb-4 small">
@@ -129,7 +129,7 @@
                     </div>
                     <input id="tenderType" value="Card" min="1" hidden="hidden" />
                     <input id="paymentNo" value="223" min="1" hidden="hidden" />
-                    <button id="postCart" class="btn btn-primary w-100 mt-2">Place order</button>
+                    <button  id="postCart" class="btn btn-primary w-100 mt-2">Place order</button>
                 </div>
             </div>
         </div>

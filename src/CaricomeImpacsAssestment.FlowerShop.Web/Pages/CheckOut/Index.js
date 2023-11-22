@@ -3,8 +3,8 @@ $('#postCart').click(function (e) {
 
     var tenderType = $('#tenderType').val();
     var paymentNo = $('#paymentNo').val();
-
-    var url = `${baseUrl}/api/app/complete-and-check-out/order-confirmation?tenderType${encodeURIComponent(tenderType)}&paymentNo=${encodeURIComponent(paymentNo)}`;
+    var baseUrl = `${window.location.protocol}//${window.location.host}`;
+    var url = `${baseUrl}/api/app/complete-and-check-out/order-confirmation?tenderType=${encodeURIComponent(tenderType)}&paymentNo=${encodeURIComponent(paymentNo)}`;
 
     abp.ajax({
         url: url,
