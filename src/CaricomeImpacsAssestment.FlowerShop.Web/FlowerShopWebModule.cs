@@ -40,6 +40,7 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.AspNetCore.SignalR;
 using CaricomeImpacsAssestment.FlowerShop.Order;
 using CaricomeImpacsAssestment.FlowerShop.Customer;
+using CaricomeImpacsAssestment.FlowerShop.Product;
 
 namespace CaricomeImpacsAssestment.FlowerShop.Web;
 
@@ -109,8 +110,10 @@ public class FlowerShopWebModule : AbpModule
         services.AddTransient<ICurrencyAppService, CurrencyAppService>();
         services.AddTransient<IAddressAppService, AddressAppService>();
         services.AddTransient<IContactAppService, ContactAppService>();
+        services.AddTransient<IItemAppService, ItemAppService>();
 
         //IAddressAppService
+        //IItemAppService
 
     }
 

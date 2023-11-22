@@ -1,12 +1,12 @@
 ﻿@page
 @model CaricomeImpacsAssestment.FlowerShop.Web.Pages.CheckOut.IndexModel
 @section styles {
-    <abp-style src="/Pages/Cart/Index.css" />
+    <abp-style src="/Pages/checkout/Index.css" />
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 }
 @section scripts {
-    <abp-script src="/Pages/Cart/Index.js" />
+    <abp-script src="/Pages/checkout/Index.js" />
 
 }
 <div class="container">
@@ -127,7 +127,9 @@
                             Get emails about product updates and events. If you change your mind, you can unsubscribe at any time. <a href="#">Privacy Policy</a>
                         </label>
                     </div>
-                    <a href="/order" class="btn btn-primary w-100 mt-2">Place order</a>
+                    <input id="tenderType" value="Card" min="1" hidden="hidden" />
+                    <input id="paymentNo" value="223" min="1" hidden="hidden" />
+                    <button id="postCart" class="btn btn-primary w-100 mt-2">Place order</button>
                 </div>
             </div>
         </div>

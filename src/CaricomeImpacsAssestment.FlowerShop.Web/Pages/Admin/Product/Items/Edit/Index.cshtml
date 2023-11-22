@@ -1,0 +1,386 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using CaricomeImpacsAssestment.FlowerShop.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR;
+@using Volo.Abp.Users
+@model CaricomeImpacsAssestment.FlowerShop.Web.Pages.Admin.Product.Items.Edit.IndexModel
+@inject IHtmlLocalizer<FlowerShopResource> L
+@inject ICurrentUser CurrentUser
+@section styles {
+    <abp-style src="/Pages/Admin/Items/Index.css" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+}
+@section scripts
+{
+    <abp-script src="/Pages/Admin/Items/Index.js" />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        // Sample data structure for grid items
+        let gridData = [];
+
+        // Function to add price to the grid
+        function addPriceToGrid() {
+            // Create a new price object from the form fields
+            let newPrice = {
+                pricingID: document.getElementById('pricingID').value,
+                priceOrDiscount: document.getElementById('priceOrDiscount').value,
+                description: document.getElementById('description').value,
+                countryId: document.getElementById('countryId').value,
+                from: document.getElementById('from').value,
+                to: document.getElementById('to').value,
+                isActive: document.getElementById('isActive').checked,
+                itemId: document.getElementById('itemId').value,
+                userDefine1: document.getElementById('userDefine1').value,
+                buyCost: document.getElementById('buyCost').value,
+                sellCost: document.getElementById('sellCost').value,
+                shippingCost: document.getElementById('shippingCost').value
+            };
+
+            // Add the new price to the grid data array
+            gridData.push(newPrice);
+
+            // Call function to update the grid display
+            updateGridDisplay();
+        }
+
+        // Function to update the grid display
+        function updateGridDisplay() {
+            // Get the grid container
+            let gridContainer = document.getElementById('priceGrid');
+
+            // Clear the current grid contents
+            gridContainer.innerHTML = '';
+
+            // Create a table element
+            let table = document.createElement('table');
+            table.classList.add('table', 'table-striped');
+
+            // Create the table header
+            let thead = document.createElement('thead');
+            thead.innerHTML = `
+                <tr>                   
+                    <th>Discount Type</th>
+                    <th>Description</th>                    
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Active</th>                    
+                    <th>User Define 1</th>
+                    <th>Buy Cost</th>
+                    <th>Sell Cost</th>
+                    <th>Shipping Cost</th>
+                </tr>
+            `;
+            table.appendChild(thead);
+
+            // Create the table body
+            let tbody = document.createElement('tbody');
+
+            // Add each grid item to the table body
+            gridData.forEach(item => {
+                let tr = document.createElement('tr');
+                tr.innerHTML = `                    
+                    <td>${item.priceOrDiscount}</td>
+                    <td>${item.description}</td>                    
+                    <td>${item.from}</td>
+                    <td>${item.to}</td>
+                    <td>${item.isActive ? 'Yes' : 'No'}</td>                    
+                    <td>${item.userDefine1}</td>
+                    <td>${item.buyCost}</td>
+                    <td>${item.sellCost}</td>
+                    <td>${item.shippingCost}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Append the table body to the table
+            table.appendChild(tbody);
+
+            // Append the table to the grid container
+            gridContainer.appendChild(table);
+        }
+
+        // Initial call to display the grid with any pre-existing data
+        updateGridDisplay();
+    </script>
+}
+
+<div class="container mt-3">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#items"><i class="fas fa-box-open"></i> Items</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#prices"><i class="fas fa-tags"></i> Prices</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#categories"><i class="fas fa-th"></i> Categories</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#productGroups"><i class="fas fa-layer-group"></i> Product Groups</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="items" class="container tab-pane active">
+            <br>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Items</h3>
+                </div>
+                <div class="card-body">
+                    <p>Manage items here.</p>
+                    <form method="post" action="/path-to-your-handler" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="iconUrl">Icon URL</label>
+                            <input type="file" class="form-control-file" id="iconUrl" name="iconUrl">
+                        </div>
+                        <div class="form-group">
+                            <label for="itemNo">Item Number</label>
+                            <input type="text" class="form-control" id="itemNo" name="itemNo" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" id="description" name="description"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="categoryId">Category</label>
+                            <select class="form-control" id="categoryId" name="categoryId">
+                                <!-- Options should be populated from the server -->
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="productGroupId">Product Group</label>
+                            <select class="form-control" id="productGroupId" name="productGroupId">
+                                <!-- Options should be populated from the server -->
+                            </select>
+                        </div>
+
+                        <!-- Add new fields here -->
+
+                        <div class="form-group">
+                            <label for="parent">Parent</label>
+                            <input type="text" class="form-control" id="parent" name="parent">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="longDescription">Long Description</label>
+                            <textarea class="form-control" id="longDescription" name="longDescription"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="isActive">Is Active</label>
+                            <input type="checkbox" id="isActive" name="isActive">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="taxID">Tax ID</label>
+                            <input type="text" class="form-control" id="taxID" name="taxID">
+                        </div>
+
+                        <!-- Image upload fields -->
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="marketingImagesUrl">Marketing Image</label>
+                                <input type="file" class="form-control-file" id="marketingImagesUrl" name="marketingImagesUrl">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="itemImagesUrl1">Item Image 1</label>
+                                <input type="file" class="form-control-file" id="itemImagesUrl1" name="itemImagesUrl1">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="itemImagesUrl2">Item Image 2</label>
+                                <input type="file" class="form-control-file" id="itemImagesUrl2" name="itemImagesUrl2">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="itemImagesUrl3">Item Image 3</label>
+                                <input type="file" class="form-control-file" id="itemImagesUrl3" name="itemImagesUrl3">
+                            </div>
+                        </div>
+
+                        <!-- Repeat for other image URLs -->
+                        <!-- ... -->
+
+                        <button type="submit" class="btn btn-primary">Save Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="prices" class="container tab-pane fade">
+            <br>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Prices</h3>
+                </div>
+                <div class="card-body">
+                    <p>Manage prices here.</p>
+                    <form method="post">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="pricingID">Pricing ID</label>
+                                <input type="text" class="form-control" id="pricingID" name="pricingID" value="11019" readonly>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="priceOrDiscount">Price or Discount</label>
+                                <input type="text" class="form-control" id="priceOrDiscount" name="priceOrDiscount" value="Price" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="description">Description</label>
+                                <input type="text" class="form-control" id="description" name="description" value="Retail">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="countryId">Country ID</label>
+                                <input type="text" class="form-control" id="countryId" name="countryId" value="3a0ee64e-d7bc-e2f0-f6f9-f6ac97a3b533">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="from">From</label>
+                                <input type="datetime-local" class="form-control" id="from" name="from" value="2023-11-15T18:37:04.837">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="to">To</label>
+                                <input type="datetime-local" class="form-control" id="to" name="to" value="2026-11-15T18:37:04.837">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="itemId">Item ID</label>
+                                <input type="text" class="form-control" id="itemId" name="itemId" value="3a0ee7c6-2f1c-bf4a-de9c-49ae681e1711">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="userDefine1">User Define 1</label>
+                                <input type="text" class="form-control" id="userDefine1" name="userDefine1" value="blog">
+                            </div>
+                        </div>
+
+                        <div class="form-check mb-3 col-md-6">
+                            <input class="form-check-input" type="checkbox" id="isActive" name="isActive" checked>
+                            <label class="form-check-label" for="isActive">Active</label>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="buyCost">Buy Cost</label>
+                                <input type="number" class="form-control" id="buyCost" name="buyCost" value="100">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="sellCost">Sell Cost</label>
+                                <input type="number" class="form-control" id="sellCost" name="sellCost" value="900">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="shippingCost">Shipping Cost</label>
+                                <input type="number" class="form-control" id="shippingCost" name="shippingCost" value="10">
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" onclick="addPriceToGrid()">Add Price to Grid</button>
+                        <hr>
+                        <div id="priceGrid" class="mb-3">
+                            <!-- Grid to display the price for the item will be dynamically inserted here -->
+                        </div>
+                        <button type="submit" class="btn btn-success">Save Price</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="categories" class="container tab-pane fade">
+            <br>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Categories</h3>
+                </div>
+                <div class="card-body">
+                    <p>Manage categories here.</p>
+                    <form method="post" action="/path-to-your-handler" enctype="multipart/form-data">
+                        <!-- Image at the top -->
+                        <div class="form-group">
+                            <label for="iconUrl">Icon URL</label>
+                            <input type="file" class="form-control-file" id="iconUrl" name="iconUrl">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" value="Seasonal" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="subtitle">Subtitle</label>
+                                <input type="text" class="form-control" id="subtitle" name="subtitle" value="Season's Greetings" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="title">Title</label>
+                            <input type="text" class="form-control" id="title" name="title" value="Festive Seasons" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="imageURL">Image URL</label>
+                            <input type="text" class="form-control" id="imageURL" name="imageURL" value="https://example.com/seasonal-flowers.jpg" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="route">Route</label>
+                            <input type="text" class="form-control" id="route" name="route" value="/seasonal" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Category</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="productGroups" class="container tab-pane fade">
+            <br>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Product Groups</h3>
+                </div>
+                <div class="card-body">
+                    <p>Manage product groups here.</p>
+                    <form method="post" action="/path-to-your-handler" enctype="multipart/form-data">
+                        <!-- Image at the top -->
+                        <div class="form-group">
+                            <label for="iconUrl">Icon URL</label>
+                            <input type="file" class="form-control-file" id="iconUrl" name="iconUrl">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" value="Seasonal" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="subtitle">Subtitle</label>
+                                <input type="text" class="form-control" id="subtitle" name="subtitle" value="Season's Greetings" required>
+                            </div>
+                        </div>
+
+
+
+                        <button type="submit" class="btn btn-primary">Save Category</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

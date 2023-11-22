@@ -1,0 +1,89 @@
+﻿@page "/admin/product/items/edit/{id:guid}"
+@using Microsoft.AspNetCore.Mvc.Localization
+@using CaricomeImpacsAssestment.FlowerShop.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR;
+@using Volo.Abp.Users
+@model CaricomeImpacsAssestment.FlowerShop.Web.Pages.Admin.Product.item.IndexModel
+@inject IHtmlLocalizer<FlowerShopResource> L
+@inject ICurrentUser CurrentUser
+@section styles {
+    <abp-style src="/Pages/Admin/Items/Index.css" />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+}
+@section scripts
+{
+    <abp-script src="/Pages/Admin/Items/Index.js" />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        // JavaScript for search functionality (basic example)
+        document.getElementById('searchInput').addEventListener('keyup', function (event) {
+            var searchTerm = event.target.value.toLowerCase();
+            var tableRows = document.querySelectorAll('.table tbody tr');
+
+            tableRows.forEach(function (row) {
+                var textContent = row.textContent.toLowerCase();
+                row.style.display = textContent.indexOf(searchTerm) > -1 ? '' : 'none';
+            });
+        });
+    </script>
+
+}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2>Products Grid</h2>
+        </div>
+        <div class="card-body">
+            <!-- Search Bar -->
+            <div class="mb-3">
+                <input type="text" class="form-control" id="searchInput" placeholder="Search Products...">
+            </div>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Item No</th>
+                        <th>Category</th>
+                        <th>Product Group</th>
+                        <th>Unit Price</th>
+                        <th>Cost Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Loop through your items here to create table rows -->
+                    <!-- Example row: -->
+                    @foreach (var items in Model.itemsAllJoinDtos)
+                    {
+                        <tr>
+                            <td>@items.allItems.Name</td>
+                            <td>@items.allItems.ItemNo</td>
+                            <td>@items.category.Name</td>
+                            <td>@items.productGroup.Name</td>
+                            <td>@items.price.SellCost</td>
+                            <td>@items.price.BuyCost</td>
+                            <td>
+                                <a href="/Admin/Product/Items/edit/3a0ee671-86d4-18a4-b813-1a3520092770" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                                <button class="btn btn-success btn-sm"><i class="fas fa-plus"></i></button>
+                                <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        </tr>
+                    }
+                    
+                    <!-- Repeat rows for other items -->
+                </tbody>
+            </table>
+            <!-- Pagination -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                    <!-- Pagination items -->
+                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
