@@ -1,4 +1,4 @@
-﻿@using Volo.Abp.Ui.Branding
+﻿@* @using Volo.Abp.Ui.Branding
 @inject IBrandingProvider BrandingProvider
 <a class="navbar-brand text-light" href="~/">
     @if (!BrandingProvider.LogoUrl.IsNullOrWhiteSpace())
@@ -6,4 +6,14 @@
         <img src="@BrandingProvider.LogoUrl" alt="@BrandingProvider.AppName" >
     }
     @BrandingProvider.AppName
+</a> *@
+@using Volo.Abp.Ui.Branding
+@inject IBrandingProvider BrandingProvider
+<a class="navbar-brand text-light" href="~/">
+    @if (!BrandingProvider.LogoUrl.IsNullOrWhiteSpace())
+    {
+        <img src="@BrandingProvider.LogoUrl" alt="The Flower Place" >
+    }
+    @BrandingProvider.AppName
 </a>
+

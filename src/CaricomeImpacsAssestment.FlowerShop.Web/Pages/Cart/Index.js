@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    
+    
     var baseUrl = `${window.location.protocol}//${window.location.host}`;
     function showFullDescription() {
         document.querySelector('.short-description').style.display = 'none';
@@ -19,7 +21,7 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: JSON.stringify(orderData),
             success: function (response) {
-                abp.notify.success('Cart uploaded successfully.');
+                abp.notify.success('Cart uploaded successfully.');                
                 window.location.href = baseUrl + '/checkout'; 
             },
             error: function (e) {
@@ -38,7 +40,7 @@ $(document).ready(function () {
             type: 'PUT',
             success: function (response) {
                 abp.notify.success('Item updated successfully');
-                window.location.reload();
+                                
             },
             error: function (err) {
                 abp.notify.error('Error updating item: ' + err.statusText);
@@ -50,10 +52,7 @@ $(document).ready(function () {
         
         updateCartItem($(this));
     });
-
-
-
-
+    
     $('.itemRemove').click(function (e) {
         e.preventDefault(); 
 
@@ -66,7 +65,8 @@ $(document).ready(function () {
             type: 'DELETE',
             success: function (response) {
                 abp.notify.success('Item removed successfully');
-                window.location.reload(); 
+                
+                
             },
             error: function (err) {
                 abp.notify.error('Error removing item: ' + err.statusText);
@@ -79,6 +79,54 @@ $(document).ready(function () {
         completeOrder();
     });
 
+    
+    //const connection = new signalR.HubConnectionBuilder()
+    //    .withUrl("/cartHub")
+    //    .configureLogging(signalR.LogLevel.Information)
+    //    .build();
 
+    //connection.start().catch(err => console.error(err.toString()));
+
+    //// This function is triggered when the cart is updated
+    //connection.on("ReceiveCartUpdate", (shoppingCartUpdate) => {
+    //    // Assuming shoppingCartUpdate contains quantity and lineTotal
+    //    updateCartUI(shoppingCartUpdate.quantity, shoppingCartUpdate.lineTotal);
+    //});
+
+    //function updateCartUI(quantity, lineTotal) {
+    //    $('#itemCountBadge').text(quantity);
+    //    $('#totalCostBadge').text('$' + lineTotal.toFixed(2));
+    //}
+
+    // //Optional: Reconnect logic in case the connection drops
+    //    connection.onclose(() => {
+    //        console.log("SignalR disconnected. Attempting to reconnect...");
+    //        setTimeout(() => connection.start(), 5000); // Retry after 5 seconds
+    //    });
 
 });
+
+//(function () {
+//    const connection = new signalR.HubConnectionBuilder()
+//        .withUrl("/cartHub")
+//        .configureLogging(signalR.LogLevel.Information)
+//        .build();
+
+//    connection.start().catch(err => console.error('SignalR Connection Error:', err.toString()));
+
+//    connection.on("ReceiveCartUpdate", (shoppingCartUpdate) => {
+//        updateCartUI(shoppingCartUpdate.quantity, shoppingCartUpdate.lineTotal);
+//    });
+
+//    function updateCartUI(quantity, lineTotal) {
+//        $('#itemCountBadge').text(quantity);
+//        $('#totalCostBadge').text('$' + lineTotal.toFixed(2));
+//    }
+
+//    // Optional: Reconnect logic in case the connection drops
+//    connection.onclose(() => {
+//        console.log("SignalR disconnected. Attempting to reconnect...");
+//        setTimeout(() => connection.start(), 5000); // Retry after 5 seconds
+//    });
+//})();
+

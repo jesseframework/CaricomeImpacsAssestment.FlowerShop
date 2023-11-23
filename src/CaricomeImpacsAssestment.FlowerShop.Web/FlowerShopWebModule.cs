@@ -41,6 +41,7 @@ using Volo.Abp.AspNetCore.SignalR;
 using CaricomeImpacsAssestment.FlowerShop.Order;
 using CaricomeImpacsAssestment.FlowerShop.Customer;
 using CaricomeImpacsAssestment.FlowerShop.Product;
+using CaricomeImpacsAssestment.FlowerShop.RealTime;
 
 namespace CaricomeImpacsAssestment.FlowerShop.Web;
 
@@ -232,9 +233,14 @@ public class FlowerShopWebModule : AbpModule
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
+        //app.UseEndpoints(endpoints =>
+        //{
+        //    endpoints.MapHub<orderDetailsUpdateHub>("/orderDetailsUpdateHub");
+        //});
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapHub<orderDetailsUpdateHub>("/orderDetailsUpdateHub");
+            endpoints.MapHub<CartHub>("/cartHub");
+            // ... Other endpoint mappings ...
         });
     }
 }

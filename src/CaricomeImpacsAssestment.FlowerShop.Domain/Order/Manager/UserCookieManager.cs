@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
@@ -56,21 +57,28 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order.Manager
             }
             else
             {
-                var userCookieInDb = await _cookietrackerRepository.GetAsync(p => p.Value.Equals(cookieValue));
-                if (userCookieInDb.Expiry > DateTime.Now)
+                var userListCookieInDb = await _cookietrackerRepository.GetListAsync(p => p.Value.Equals(cookieValue));
+                if (userListCookieInDb.Any())
                 {
-                    userCookieInDb.Value = cookieValue;
-                    userCookieInDb.UserId = cookieId; 
-                    userCookieInDb.OrderId = cookieId;
                     
+                    cookieId = userListCookieInDb.Single().Id;
+                    var userCookieInDb = await _cookietrackerRepository.GetAsync(p => p.Id== cookieId);
+                    if (userCookieInDb.Expiry > DateTime.Now)
+                    {
+                        userCookieInDb.Value = cookieValue;
+                        userCookieInDb.UserId = cookieId;
+                        userCookieInDb.OrderId = cookieId;
 
-                    changeMade = true;
-                    cookieId = userCookieInDb.Id;
+
+                        changeMade = true;
+                        cookieId = userCookieInDb.Id;
+                    }
+                    if (changeMade == true)
+                    {
+                        await _cookietrackerRepository.UpdateAsync(userCookieInDb);
+                    }
                 }
-                if(changeMade == true)
-                {
-                    await _cookietrackerRepository.UpdateAsync(userCookieInDb);
-                }
+                
                 
             }
             return cookieId;

@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="CartHub.cs" />
     <Compile Remove="DateUpdateHub.cs" />
   </ItemGroup>
 

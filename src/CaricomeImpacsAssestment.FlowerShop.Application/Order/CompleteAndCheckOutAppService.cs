@@ -56,7 +56,10 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         private readonly IRepository<ItemPrice, Guid> _itempricesRepository;
         private readonly IRepository<Item, Guid> _itemRepository;
         private readonly IRepository<CookieTracker, Guid> _cookietrackingRepository;
+        private readonly IRepository<SerialNumber, Guid> _serailNumberRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public CompleteAndCheckOutAppService(
+            IHttpContextAccessor httpContextAccessor,
             BrowserInfomation browserInfomation,
             UserCookieManager userCookieManager,
             CookieService cookieService,
@@ -64,6 +67,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             IRepository<OrderHeader, Guid> orderHeaderRepository,
             ICustomerAccountAppService customerAccountAppService,            
             IOrderDetailTempAppService orderDetailTempAppService,
+            IRepository<SerialNumber, Guid> serailNumberRepository,
             IRepository<OrderPayment, Guid> orderPaymentRepository,
             IRepository<Coupon, Guid> couponRepository,
             IRepository<Country, Guid> countryRepository,
@@ -76,8 +80,8 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             IRepository<ProductGroup, Guid> productgroupRepository,
             IRepository<ItemPrice, Guid> itempricesRepository,
             IRepository<Item, Guid> itemRepository,
-            IRepository<OrderDetail, Guid> orderDetailRepository,
-            IRepository<CookieTracker, Guid> cookietrackingRepository) : base(orderHeaderRepository) 
+            IRepository<OrderDetail, Guid> orderDetailRepository,            
+        IRepository<CookieTracker, Guid> cookietrackingRepository) : base(orderHeaderRepository) 
         {
             _orderHeaderRepository = orderHeaderRepository;
             _itemAppService = itemAppService;
@@ -100,6 +104,8 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             _itempricesRepository = itempricesRepository;
             _itemRepository = itemRepository;
             _cookietrackingRepository = cookietrackingRepository;
+            _serailNumberRepository = serailNumberRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<ResponseStatusCodesDto> CreateCompleteOrderAsync(CreateUpdateOrderHeaderDtoMin input)
         {
@@ -380,8 +386,40 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                 PaymentNo = paymentNo //Come from payment gateway
             };
 
+
             var saveCartPayment = ObjectMapper.Map<CreateUpdateOrderPaymentDto, OrderPayment>(savePayment);
             await _orderPaymentRepository.InsertAsync(saveCartPayment);
+
+            var getCookie = await _cookietrackingRepository.GetAsync(checkCookieId);
+            if(getCookie != null)
+            {
+                SerialNumberGeneratorService _numberGenerator = new SerialNumberGeneratorService(_serailNumberRepository);
+                var _orderNo = await _numberGenerator.GetSerialNoAsync(type: "Order", accountNo: "", partnerNo: "");
+
+                
+                getCookie.Expiry = DateTime.Now.AddHours(-1);
+                getCookie.OrderNo = _orderNo;
+
+                CookieService cookieService = new CookieService(_httpContextAccessor);
+
+                var removeBrowserCookie =  cookieService.GetBrowserCookie(getCookie.Value);
+                if(removeBrowserCookie != null)
+                {
+                    CookieOptions options = new CookieOptions
+                    {
+                        Expires = DateTime.Now.AddDays(-5),
+                        Secure = true,  //Make is safe bro
+                        HttpOnly = true //make sure JavaScript cant see Cookie Jermaine
+                    };
+
+                    _httpContextAccessor.HttpContext.Response.Cookies.Delete(getCookie.Value, options);
+                }
+                
+            }  
+            
+            
+            
+            var expiredCookie = _cookietrackingRepository.UpdateAsync(getCookie);
 
             return new ResponseStatusCodesDto
             {
@@ -608,5 +646,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                 await _orderHeaderRepository.UpdateAsync(updateOrder);
             }
         }
+
+        
     }
 }

@@ -1,6 +1,7 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using CaricomeImpacsAssestment.FlowerShop.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR
 @using Volo.Abp.Users
 @model CaricomeImpacsAssestment.FlowerShop.Web.Pages.IndexModel
 @inject IHtmlLocalizer<FlowerShopResource> L
@@ -10,6 +11,9 @@
 }
 @section scripts {
 <abp-script src="/Pages/Index.js" />
+    <abp-script src="/js/flowership.js" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.9/signalr.min.js"></script>
+    <abp-script type="typeof(SignalRBrowserScriptContributor)" />
     
 }
 

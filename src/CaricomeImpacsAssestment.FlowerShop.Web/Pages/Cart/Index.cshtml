@@ -1,14 +1,17 @@
 ﻿@page
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.SignalR
 @model CaricomeImpacsAssestment.FlowerShop.Web.Pages.Cart.IndexModel
 @section styles {
     <abp-style src="/Pages/Cart/Index.css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 }
 @section scripts {
+    <abp-script src="/js/flowership.js" />
     <abp-script src="/Pages/Cart/Index.js" />
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.9/signalr.min.js"></script>
+    <abp-script type="typeof(SignalRBrowserScriptContributor)" />
    
    
 }

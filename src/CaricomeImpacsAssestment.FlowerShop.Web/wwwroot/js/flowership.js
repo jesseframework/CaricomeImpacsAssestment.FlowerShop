@@ -19,7 +19,7 @@ $(document).ready(function () {
                 if (response.statusCode === 800) {
                     abp.notify.success(response.statusMessage || 'Item added to cart successfully.');
                    
-                    updateCartAmount();
+                    //updateCartAmount();
                 } else {
 
                     abp.notify.warn(response.statusMessage || 'Something went wrong!');
@@ -32,31 +32,59 @@ $(document).ready(function () {
         });
     });
 
-    function updateCartAmount() {
-        var baseUrl = `${window.location.protocol}//${window.location.host}`;
-        var cookieId = ck;
-        
-        var url = baseUrl + '/api/app/add-to-shopping-card/shopping-cart-amount-by-cookie-id/' + cookieId;
-       
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
+    //function updateCartAmount() {
+    //    var baseUrl = `${window.location.protocol}//${window.location.host}`;
+    //    var cookieId = ck;
 
-                updateCartDisplay(data.quantity, data.lineTotal);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
+    //    var url = baseUrl + '/api/app/add-to-shopping-card/shopping-cart-amount-by-cookie-id/' + cookieId;
 
-    function updateCartDisplay(quantity, lineTotal) {
-        $('#itemCountBadge').text(quantity);
-        $('#totalCostBadge').text('$' + lineTotal.toFixed(2));
-    }
+    //    fetch(url)
+    //        .then(response => {
+    //            if (!response.ok) {
+    //                throw new Error('Network response was not ok');
+    //            }
+    //            return response.json();
+    //        })
+    //        .then(data => {
 
+    //            updateCartDisplay(data.quantity, data.lineTotal);
+    //        })
+    //        .catch(error => {
+    //            console.error('Error:', error);
+    //        });
+    //}
+
+    //function updateCartDisplay(quantity, lineTotal) {
+    //    $('#itemCountBadge').text(quantity);
+    //    $('#totalCostBadge').text('$' + lineTotal.toFixed(2));
+    //}
+
+
+});
+
+$(document).ready(function () {
+
+    (function () {
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/cartHub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        connection.start().catch(err => console.error('SignalR Connection Error:', err.toString()));
+
+        connection.on("ReceiveCartUpdate", (shoppingCartUpdate) => {
+            updateCartUI(shoppingCartUpdate.quantity, shoppingCartUpdate.lineTotal);
+        });
+
+        function updateCartUI(quantity, lineTotal) {
+            $('#itemCountBadge').text(quantity);
+            $('#totalCostBadge').text('$' + lineTotal.toFixed(2));
+        }
+
+        // Optional: Reconnect logic in case the connection drops
+        connection.onclose(() => {
+            console.log("SignalR disconnected. Attempting to reconnect...");
+            setTimeout(() => connection.start(), 5000); // Retry after 5 seconds
+        });
+    })();
 });

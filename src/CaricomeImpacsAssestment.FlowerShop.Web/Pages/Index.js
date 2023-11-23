@@ -1,7 +1,12 @@
 $(function () {
     abp.log.debug('Index.js initialized!');
-   
+    
+
+    
 });
+
+
+
 
 function updateCartDisplay(itemCount, totalCost) {
     document.getElementById('itemCountBadge').innerText = itemCount;

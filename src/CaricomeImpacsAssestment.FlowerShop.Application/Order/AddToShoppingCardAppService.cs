@@ -5,7 +5,9 @@ using CaricomeImpacsAssestment.FlowerShop.Order.Manager;
 using CaricomeImpacsAssestment.FlowerShop.Payment;
 using CaricomeImpacsAssestment.FlowerShop.Product;
 using CaricomeImpacsAssestment.FlowerShop.Product.Dto;
+using CaricomeImpacsAssestment.FlowerShop.RealTime;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,9 +28,10 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         CreateUpdateOrderDetailTempDto>,
         IOrderDetailTempAppService
     {
-        
-        
-        private readonly IRepository<OrderDetailTemp, Guid> _orderdetailTeamRepository;       
+
+        private readonly IHubContext<CartHub> _cartHubContext;
+        private readonly IRepository<OrderDetailTemp, Guid> _orderdetailTeamRepository;
+        private readonly IOrderDetailTempAppService _orderDetailTempAppService;
         private readonly IItemAppService _itemAppService;        
         private readonly CookieService _cookieService;
         private readonly IRepository<Coupon, Guid> _couponRepository;
@@ -40,6 +43,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
         private readonly IRepository<Item, Guid> _itemRepository;
         private readonly IRepository<CookieTracker, Guid> _cookietrackingRepository;
         public AddToShoppingCardAppService(
+            IHubContext<CartHub> cartHubContext,
              IRepository<Category, Guid> categoryRepository,
              IRepository<Coupon, Guid> couponRepository,
             IRepository<ProductGroup, Guid> productgroupRepository,
@@ -63,6 +67,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
             _itemRepository = itemRepository;
             _couponRepository = couponRepository;
             _cookietrackingRepository = cookietrackingRepository;
+            _cartHubContext = cartHubContext;
         }
         public async Task<ResponseStatusCodesDto> CreateShoppingCart(CreateUpdateOrderDetailTempMin input)
         {
@@ -129,6 +134,7 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                 var saveTempCart = ObjectMapper.Map<CreateUpdateOrderDetailTempDto, OrderDetailTemp>(temCart);
                 await _orderdetailTeamRepository.InsertAsync(saveTempCart);
 
+                await GetShoppingCartAmountByCookieId(checkCookieId);
 
                 return new ResponseStatusCodesDto
                 {
@@ -191,6 +197,14 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                 + (updateQuery.UnitPrice * quantity) + updateQuery.Shipping;
 
                 await _orderdetailTeamRepository.UpdateAsync(updateQuery);
+
+                CartHub cartHub = new CartHub(_cartHubContext);
+                var cartMessage = new shoppingCartUpdateDto()
+                {
+                    LineTotal = updateQuery.LineTotal,
+                    Quantity = updateQuery.Quantity,
+                };
+                await cartHub.UpdateCart(cartMessage);
             }
         }
         public async Task<List<OrderDetailTempDto>> GetShoppingCartByCookieId(Guid cookieId)
@@ -250,8 +264,21 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                                       Shipping = g.Sum(x => x.Shipping),
                                       Quantity = g.Count()
                                   }).FirstOrDefault();
+            if(orderTempQuery != null)
+            {
+                CartHub cartHub = new CartHub(_cartHubContext);
+                var cartMessage = new shoppingCartUpdateDto()
+                {
+                    LineTotal = orderTempQuery.LineTotal,
+                    Quantity = orderTempQuery.Quantity,
+                };
+                await cartHub.UpdateCart(cartMessage);
+            }
+            
 
             return orderTempQuery;
+
+            
         }
         public async Task<List<OrderWithItemDataDto>> GetShoppingCartForCheckOut(Guid cookieId)
         {
@@ -303,6 +330,9 @@ namespace CaricomeImpacsAssestment.FlowerShop.Order
                                       TaxAmount = g.Sum(x => x.TaxAmount),
 
                                   }).ToList();
+
+            //CartHub cartHub = new CartHub(_cartHubContext);
+            //await cartHub.AddToCart(orderTempQuery);
 
             return orderTempQuery;
         }
